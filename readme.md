@@ -1,0 +1,1 @@
+Jenkins sprawdza branch 'Development' co pół godziny i uruchamia pipeline w przypadku wykrycia zmian.

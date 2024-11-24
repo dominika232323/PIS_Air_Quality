@@ -1,7 +1,6 @@
-do tego folderu będą wstawiane ważniejsze elementy związane z jenkinsem np.:
+do tego folderu będą wstawiane ważniejsze elementy związane z postawieniem jenkinsa np.:
 
 - dockerfile
-- jenkinsfile
 
 celem jest możliwość postawienia jenkinsa o tej samej konfiguracji na innym urządzeniu
 
