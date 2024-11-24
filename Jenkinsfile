@@ -5,18 +5,31 @@ pipeline {
             }
       }
     triggers{
-        pollSCM '*/30 * * * *'
+        pollSCM '*/30 * * * *',
+        githubPush()
     }
     stages {
     stage('Build') {
+        when{
+            anyOf{
+                branch 'master'
+                branch 'development'
+            }
+        }
         steps {
             echo "Building.."
             sh '''
-            pip install -r requirements.txt
+            pipx ensurepath
             '''
         }
     }
     stage('Test') {
+        when{
+            anyOf{
+                branch 'master'
+                branch 'development'
+            }
+        }
         steps {
             echo "Testing.."
             sh '''
@@ -25,6 +38,10 @@ pipeline {
         }
     }
     stage('Deliver') {
+        when{
+            branch 'master'
+            branch 'development'
+        }
         steps {
             echo 'Deliver....'
             sh '''
