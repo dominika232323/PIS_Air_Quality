@@ -9,12 +9,6 @@ pipeline {
     }
     stages {
     stage('Build') {
-        when{
-            anyOf{
-                branch 'master'
-                branch 'development'
-            }
-        }
         steps {
             echo "Building.."
             sh '''
@@ -23,12 +17,6 @@ pipeline {
         }
     }
     stage('Test') {
-        when{
-            anyOf{
-                branch 'master'
-                branch 'development'
-            }
-        }
         steps {
             echo "Testing.."
             sh '''
@@ -37,10 +25,6 @@ pipeline {
         }
     }
     stage('Deliver') {
-        when{
-            branch 'master'
-            branch 'development'
-        }
         steps {
             echo 'Deliver....'
             sh '''
