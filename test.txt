@@ -1,0 +1,1 @@
+tylko by sprawdzić wywoływanie pipelinu
