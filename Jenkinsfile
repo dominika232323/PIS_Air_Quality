@@ -5,7 +5,8 @@ pipeline {
             }
       }
     triggers{
-        pollSCM '*/30 * * * *'
+        pollSCM '*/30 * * * *',
+        githubPush()
     }
     stages {
     stage('Build') {
