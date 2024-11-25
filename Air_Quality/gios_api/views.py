@@ -1,3 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
+from . import services
 
-# Create your views here.
+def gios(request):
+    return services.get_station_info(515)
