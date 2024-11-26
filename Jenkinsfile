@@ -12,8 +12,11 @@ pipeline {
         steps {
             echo "Building.."
             sh '''
-            pipx ensurepath
-            pipx install django
+            mkdir -p ~/.venvs
+            python3 -m venv $HOME/.venvs/pis_env
+            ~/.venvs/pis_env/bin/python --version
+            ~/.venvs/pis_env/bin/python  -m pip install django
+            source ~/.venvs/pis_env/bin/activate
             '''
         }
     }
@@ -21,7 +24,6 @@ pipeline {
         steps {
             echo "Testing.."
             sh '''
-            pipx install django
             cd Air_Quality
             pytest
             '''
