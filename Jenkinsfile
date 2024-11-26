@@ -17,7 +17,7 @@ pipeline {
             ls -al
             .venv/bin/python --version
             .venv/bin/python -m pip install django
-            . venv/bin/activate
+            .venv/bin/activate
             '''
         }
     }
