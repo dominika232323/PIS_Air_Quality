@@ -11,7 +11,7 @@ pipeline {
     stage('Build') {
         steps {
             echo "Building.."
-            bash '''
+            sh '''
             cd Air_Quality
             python3 -m venv .venv
             .venv/venv/bin/python --version
@@ -23,7 +23,7 @@ pipeline {
     stage('Test') {
         steps {
             echo "Testing.."
-            bash '''
+            sh '''
 
             pytest
             '''
@@ -32,7 +32,7 @@ pipeline {
     stage('Deliver') {
         steps {
             echo 'Deliver....'
-            bash '''
+            sh '''
             echo "doing delivery stuff.."
             '''
         }
