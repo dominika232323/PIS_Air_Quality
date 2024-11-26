@@ -19,6 +19,7 @@ pipeline {
             .venv/bin/python -m pip install django
             . .venv/bin/activate
             pip install pytest
+            pip install pytest-django
             deactivate
             . .venv/bin/activate
             '''
