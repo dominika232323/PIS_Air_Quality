@@ -20,8 +20,7 @@ pipeline {
             pip install pytest
             pip install pytest-django
             deactivate
-            .venv/bin/python -m pip install django
-            .venv/bin/python -m pip install pytest-django
+            .venv/bin/python -m pip install -t ../requirements.txt
             '''
         }
     }
