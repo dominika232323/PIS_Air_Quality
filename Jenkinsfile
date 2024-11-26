@@ -14,13 +14,15 @@ pipeline {
             sh '''
             cd Air_Quality
             python3 -m venv .venv
+            ls -al
             .venv/bin/python --version
             . .venv/bin/activate
             pip install pytest
-            deactivate
-            . .venv/bin/activate
-            pip install django
             pip install pytest-django
+            deactivate
+            .venv/bin/python -m pip install django
+            .venv/bin/python -m pip install pytest-django
+            . .venv/bin/activate
             '''
         }
     }
