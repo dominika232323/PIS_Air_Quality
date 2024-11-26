@@ -21,6 +21,7 @@ pipeline {
         steps {
             echo "Testing.."
             sh '''
+            pipx install django
             cd Air_Quality
             pytest
             '''
