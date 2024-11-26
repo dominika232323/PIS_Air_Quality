@@ -12,8 +12,14 @@ pipeline {
         steps {
             echo "Building.."
             sh '''
-            pipx ensurepath
-            pipx install django
+            cd Air_Quality
+            python3 -m venv .venv
+            ls -al
+            .venv/bin/python --version
+            . .venv/bin/activate
+            pip install pytest
+            python -m pip install -r requirements.txt
+            deactivate
             '''
         }
     }
@@ -22,6 +28,7 @@ pipeline {
             echo "Testing.."
             sh '''
             cd Air_Quality
+            . .venv/bin/activate
             pytest
             '''
         }
