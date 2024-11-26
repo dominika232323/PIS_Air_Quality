@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+Air_Quality/Air_Quality/__pycache__/
 
 # C extensions
 *.so
