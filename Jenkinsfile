@@ -11,20 +11,20 @@ pipeline {
     stage('Build') {
         steps {
             echo "Building.."
-            sh '''
-            mkdir -p ~/.venvs
-            python3 -m venv $HOME/.venvs/pis_env
-            ~/.venvs/pis_env/bin/python --version
-            ~/.venvs/pis_env/bin/python  -m pip install django
-            source ~/.venvs/pis_env/bin/activate
+            bash '''
+            cd Air_Quality
+            python3 -m venv .venv
+            .venv/venv/bin/python --version
+            .venv/venv/bin/python -m pip install django
+            . venv/bin/activate
             '''
         }
     }
     stage('Test') {
         steps {
             echo "Testing.."
-            sh '''
-            cd Air_Quality
+            bash '''
+
             pytest
             '''
         }
@@ -32,7 +32,7 @@ pipeline {
     stage('Deliver') {
         steps {
             echo 'Deliver....'
-            sh '''
+            bash '''
             echo "doing delivery stuff.."
             '''
         }
