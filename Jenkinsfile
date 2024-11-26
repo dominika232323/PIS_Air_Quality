@@ -22,7 +22,6 @@ pipeline {
             deactivate
             .venv/bin/python -m pip install django
             .venv/bin/python -m pip install pytest-django
-            . .venv/bin/activate
             '''
         }
     }
@@ -31,6 +30,7 @@ pipeline {
             echo "Testing.."
             sh '''
             cd Air_Quality
+            . .venv/bin/activate
             pytest
             '''
         }
