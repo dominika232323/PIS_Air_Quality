@@ -13,6 +13,7 @@ pipeline {
             echo "Building.."
             sh '''
             pipx ensurepath
+            pipx install django
             '''
         }
     }
