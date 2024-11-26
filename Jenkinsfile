@@ -28,7 +28,7 @@ pipeline {
         steps {
             echo "Testing.."
             sh '''
-
+            cd Air_Quality
             pytest
             '''
         }
