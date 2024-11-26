@@ -18,6 +18,9 @@ pipeline {
             .venv/bin/python --version
             .venv/bin/python -m pip install django
             . .venv/bin/activate
+            pip install pytest
+            deactivate
+            . .venv/bin/activate
             '''
         }
     }
