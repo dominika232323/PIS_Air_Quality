@@ -20,6 +20,8 @@ pipeline {
             pip install pytest
             pip install pytest-django
             deactivate
+            pwd
+            ls -al
             .venv/bin/python -m pip install -t ../requirements.txt
             '''
         }
