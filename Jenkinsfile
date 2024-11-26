@@ -15,8 +15,8 @@ pipeline {
             cd Air_Quality
             python3 -m venv .venv
             ls -al
-            la -al ./.venv
-            la -al ./.venv/venv
+            ls -al ./.venv
+            ls -al ./.venv/venv
             .venv/venv/bin/python --version
             .venv/venv/bin/python -m pip install django
             . venv/bin/activate
