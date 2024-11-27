@@ -18,6 +18,7 @@ pipeline {
             .venv/bin/python --version
             . .venv/bin/activate
             pip install pytest
+            cd ..
             python -m pip install -r requirements.txt
             deactivate
             '''
