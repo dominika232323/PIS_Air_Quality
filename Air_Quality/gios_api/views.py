@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse
 from . import services
 
 def welcome_user(request):
-    return HttpResponse("Welcome! To see all stations, use /all. To see specific station info use /<station_id>")
+    return HttpResponse("Welcome! To see all stations, use /all. To see specific station info use /station_id")
 
 def get_all_stations(request):
     return services.get_all_stations()
