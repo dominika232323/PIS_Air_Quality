@@ -1,7 +1,7 @@
 pipeline {
     agent {
         node {
-            label 'python-agent'
+            label 'python-dind'
             }
       }
     triggers{
