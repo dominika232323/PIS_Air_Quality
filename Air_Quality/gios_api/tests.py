@@ -1,6 +1,6 @@
 import pytest
 from django.urls import reverse
-from gios_api.services import map_station_json_to_object
+from gios_api.services import map_station_json_to_object, get_all_stations, get_station_sensors, map_sensor_json_to_object
 
 def test_map_station_json_into_object():
     station_json = {
@@ -27,6 +27,26 @@ def test_map_station_json_into_object():
     assert station_data.location.street == 'ul. Kasztanowa 29'
 
 
+def test_get_all_stations():
+    stations = get_all_stations()
+    assert len(stations) > 0
 
+def test_map_sensor_json_into_object():
+    sensor_json = {
+      "Identyfikator stanowiska": 464,
+      "Identyfikator stacji": 77,
+      "Wskaźnik": "kadm w PM10",
+      "Wskaźnik - wzór": "Cd(PM10)",
+      "Wskaźnik - kod": "Cd(PM10)",
+      "Id wskaźnika": 57
+    }
+    sensor_data = map_sensor_json_to_object(sensor_json)
+    assert sensor_data.id == 464
+    assert sensor_data.indicator == 'kadm w PM10'
+
+
+def test_get_station_sensors():
+    sensors = get_station_sensors(77)
+    assert len(sensors) == 6
 
 

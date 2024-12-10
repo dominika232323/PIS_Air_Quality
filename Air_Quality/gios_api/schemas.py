@@ -8,6 +8,10 @@ class Location:
     city: str
     street: str
 
+@dataclass
+class SensorData:
+    id: int
+    indicator: str
 
 @dataclass
 class StationData:
