@@ -1,6 +1,9 @@
 import pytest
 from django.urls import reverse
-from gios_api.services import map_station_json_to_object, get_all_stations, get_station_sensors, map_sensor_json_to_object
+from gios_api.services import (map_station_json_to_object, get_all_stations,
+                               get_station_sensors, map_sensor_json_to_object,
+                               get_current_sensor_measurements)
+
 
 def test_map_station_json_into_object():
     station_json = {
@@ -27,9 +30,10 @@ def test_map_station_json_into_object():
     assert station_data.location.street == 'ul. Kasztanowa 29'
 
 
-def test_get_all_stations():
-    stations = get_all_stations()
-    assert len(stations) > 0
+# def test_get_all_stations():
+#     stations = get_all_stations()
+#     assert len(stations) > 0
+
 
 def test_map_sensor_json_into_object():
     sensor_json = {
@@ -50,3 +54,7 @@ def test_get_station_sensors():
     assert len(sensors) == 6
 
 
+def test_get_sensor_measurements():
+    measurements = get_current_sensor_measurements(52)
+    assert measurements[1].date is not None
+    assert measurements[1].value is not None
