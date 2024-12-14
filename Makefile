@@ -39,5 +39,21 @@ stop_db:
 #Run application with one command:
 up: migrations start_db run
 
+#Make migrations
+migrations-venv:
+	./venv/bin/python3.12 ./Air_Quality/manage.py migrate
+
+#Start database
+start_db-venv:
+	docker compose -f ./database/docker-compose.yml up -d
+
+#Run Django server on http://localhost:8000/
+run-venv:
+	./venv/bin/python3.12 ./Air_Quality/manage.py runserver
+
+
+#Run application with one command:
+up-venv: migrations-venv start_db-venv run-venv
+
 #Stop application:
 down: stop_db
