@@ -14,9 +14,13 @@ def map_sensor_json_to_object(sensor: dict) -> SensorData:
 
 
 def map_measurement_json_to_object(measurement: dict) -> Measurement:
-    measurement_date = measurement['Data']
-    measurement_date = datetime.strptime(measurement_date, "%Y-%m-%d %H:%M:%S")
-    return Measurement(measurement_date, float(measurement['Wartość']))
+    try:
+        measurement_date = measurement['Data']
+        measurement_date = datetime.strptime(measurement_date, "%Y-%m-%d %H:%M:%S")
+        return Measurement(measurement_date, float(measurement['Wartość']))
+    except TypeError as T_err:
+        print(f"Data not complete - value is Null {T_err}")
+        return Measurement(None, -1)
 
 
 def convert_json_into_sensors_objects(sensors: list[dict]) -> list[SensorData]:
@@ -35,20 +39,35 @@ def convert_json_into_measurements_objects(measurements: list[dict]) -> list[Mea
 
 
 def get_all_stations() -> list[StationData]:
-    params = {'sort': 'Id'}
-    response = requests.get('https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll', params=params).json()
-    stations = response['Lista stacji pomiarowych']
-    return convert_json_into_stations_objects(stations)
+    try:
+        params = {'sort': 'Id'}
+        response = requests.get('https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll', params=params)
+        response.raise_for_status()
+        stations = response.json()['Lista stacji pomiarowych']
+        return convert_json_into_stations_objects(stations)
+    except requests.RequestException as e:
+        print(f"An error occured while trying to fetch stations data: {e}")
+        return []
 
 
 def get_station_sensors(station_id: int) -> list[SensorData]:
-    response = requests.get(f'https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{station_id}').json()
-    sensors = response['Lista stanowisk pomiarowych dla podanej stacji']
-    return convert_json_into_sensors_objects(sensors)
+    try:
+        response = requests.get(f'https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{station_id}')
+        response.raise_for_status()
+        sensors = response.json()['Lista stanowisk pomiarowych dla podanej stacji']
+        return convert_json_into_sensors_objects(sensors)
+    except requests.RequestException as e:
+        print(f"An error occured while trying to fetch sensors: {e}")
+        return []
 
 
 def get_current_sensor_measurements(sensor_id: int) -> list[Measurement]:
-    params = {'sort': 'Data'}
-    response = requests.get(f'https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/{sensor_id}', params=params).json()
-    measurements = response['Lista danych pomiarowych']
-    return convert_json_into_measurements_objects(measurements)
+    try:
+        params = {'sort': 'Data'}
+        response = requests.get(f'https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/{sensor_id}', params=params)
+        response.raise_for_status()
+        measurements = response.json()['Lista danych pomiarowych']
+        return convert_json_into_measurements_objects(measurements)
+    except requests.RequestException as e:
+        print(f"An error occured while trying to fetch sensor's measurements: {e}")
+        return []
