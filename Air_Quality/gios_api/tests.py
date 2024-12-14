@@ -3,6 +3,7 @@ from django.urls import reverse
 from gios_api.services import (map_station_json_to_object, get_all_stations,
                                get_station_sensors, map_sensor_json_to_object,
                                get_current_sensor_measurements)
+import requests
 
 
 def test_map_station_json_into_object():
@@ -58,3 +59,33 @@ def test_get_sensor_measurements():
     measurements = get_current_sensor_measurements(52)
     assert measurements[1].date is not None
     assert measurements[1].value is not None
+
+
+def test_get_all_stations_request_exception(monkeypatch):
+    def mock_get(*args, **kwargs):
+        raise requests.RequestException("API Error")
+
+    monkeypatch.setattr(requests, "get", mock_get)
+
+    result = get_all_stations()
+    assert result == []
+
+
+def test_get_all_sensors_request_exception(monkeypatch):
+    def mock_get(*args, **kwargs):
+        raise requests.RequestException("API Error")
+
+    monkeypatch.setattr(requests, "get", mock_get)
+
+    result = get_station_sensors(55)
+    assert result == []
+
+
+def test_get_current_station_mesurements_execption(monkeypatch):
+    def mock_get(*args, **kwargs):
+        raise requests.RequestException("API Error")
+
+    monkeypatch.setattr(requests, "get", mock_get)
+
+    result = get_current_sensor_measurements(55)
+    assert result == []
