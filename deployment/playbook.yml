@@ -43,6 +43,7 @@
       git:
         repo: https://github.com/dominika232323/PIS_Air_Quality.git
         dest: /home/{{ ansible_user }}/PIS-proj
+        version: deployment
         update: yes
 
     - name: install python3 virtualenv
@@ -74,4 +75,4 @@
     - name: run app
       make:
         chdir: /home/{{ ansible_user }}/PIS-proj/
-        target: up
+        target: up-venv
