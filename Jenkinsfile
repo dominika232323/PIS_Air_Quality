@@ -38,6 +38,7 @@ pipeline {
         steps {
             echo 'Deliver....'
             sh '''
+            cd deployment
             terraform apply -auto-approve
             '''
         }
