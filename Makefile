@@ -37,7 +37,7 @@ stop_db:
 	docker compose -f ./database/docker-compose.yml down
 
 #Run application with one command:
-up: requirements migrations start_db run
+up: migrations start_db run
 
 #Stop application:
 down: stop_db
