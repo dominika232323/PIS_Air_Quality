@@ -1,0 +1,45 @@
+---
+- name: Setup Project
+  hosts: all
+  become: true
+  vars:
+    ansible_user: "azureuser"
+    public_ip: "52.174.2.172"
+
+  tasks:
+    - name: download python
+      apt:
+        name:
+          - python3
+        state:
+          - present
+
+    - name: Install pip for Python 3
+      apt:
+        name: python3-pip
+        state: present
+      become: yes
+
+    - name: remove old repo
+      shell:
+          rm -rf /home/{{ ansible_user }}/PIS-proj
+      ignore_errors: yes
+      become: yes
+
+    - name: clone repo
+      git:
+        repo: https://github.com/dominika232323/PIS_Air_Quality.git
+        dest: /home/{{ ansible_user }}/PIS-proj
+        update: yes
+
+    - name: install dependencies
+      pip:
+        requirements: /home/{{ ansible_user }}/PIS-proj/PIS_Air_Quality/requirements.txt
+        virtualenv: /opt/.virtualenv/project_env
+        virtualenv_python: python3
+      become: yes
+
+    - name: run app
+      make:
+        chdir: /home/{{ ansible_user }}/PIS-proj/PIS_Air_Quality/
+        target: up
