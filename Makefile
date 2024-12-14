@@ -41,15 +41,15 @@ up: migrations start_db run
 
 #Make migrations
 migrations-venv:
-	./venv/bin/python3 ./PIS-proj/Air_Quality/manage.py migrate
+	../venv/bin/python3 ./Air_Quality/manage.py migrate
 
 #Start database
 start_db-venv:
-	docker compose -f ./PIS-proj/database/docker-compose.yml up -d
+	docker compose -f ./database/docker-compose.yml up -d
 
 #Run Django server on http://localhost:8000/
 run-venv:
-	./venv/bin/python3 ./PIS-proj/Air_Quality/manage.py runserver
+	../venv/bin/python3 ./Air_Quality/manage.py runserver
 
 
 #Run application with one command:
