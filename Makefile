@@ -41,7 +41,7 @@ up: migrations start_db run
 
 #Make migrations
 migrations-venv:
-	./venv/bin/python3.12 ./PIS-proj/Air_Quality/manage.py migrate
+	./venv/bin/python3 ./PIS-proj/Air_Quality/manage.py migrate
 
 #Start database
 start_db-venv:
@@ -49,7 +49,7 @@ start_db-venv:
 
 #Run Django server on http://localhost:8000/
 run-venv:
-	./venv/bin/python3.12 ./PIS-proj/Air_Quality/manage.py runserver
+	./venv/bin/python3 ./PIS-proj/Air_Quality/manage.py runserver
 
 
 #Run application with one command:
