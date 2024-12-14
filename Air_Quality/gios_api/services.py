@@ -20,31 +20,22 @@ def map_measurement_json_to_object(measurement: dict) -> Measurement:
 
 
 def convert_json_into_sensors_objects(sensors: list[dict]) -> list[SensorData]:
-    sensors_data = []
-    for sensor in sensors:
-        sensor_data = map_sensor_json_to_object(sensor)
-        sensors_data.append(sensor_data)
+    sensors_data = [map_sensor_json_to_object(sensor) for sensor in sensors]
     return sensors_data
 
 
 def convert_json_into_stations_objects(stations: list[dict]) -> list[StationData]:
-    stations_data = []
-    for station in stations:
-        station_data = map_station_json_to_object(station)
-        stations_data.append(station_data)
+    stations_data = [map_station_json_to_object(station) for station in stations]
     return stations_data
 
 
 def convert_json_into_measurements_objects(measurements: list[dict]) -> list[Measurement]:
-    measurements_data = []
-    for measurement in measurements:
-        mes_data = map_measurement_json_to_object(measurement)
-        measurements_data.append(mes_data)
+    measurements_data = [map_measurement_json_to_object(measurement) for measurement in measurements]
     return measurements_data
 
 
 def get_all_stations() -> list[StationData]:
-    params = {'sort': 'id'}
+    params = {'sort': 'Id'}
     response = requests.get('https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll', params=params).json()
     stations = response['Lista stacji pomiarowych']
     return convert_json_into_stations_objects(stations)
