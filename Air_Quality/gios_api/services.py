@@ -4,9 +4,15 @@ from datetime import datetime
 
 
 def map_station_json_to_object(station: dict) -> StationData:
-    commune, district, voivodeship, city, street = station['Gmina'], station['Powiat'], station['Województwo'], station['Nazwa miasta'], station['Ulica']
-    station_location = Location(commune, district, voivodeship, city, street)
-    return StationData(station['Identyfikator stacji'], station['Nazwa stacji'], station_location)
+    location = station['city']['commune']
+    station_location = Location(
+        location['communeName'],
+        location['districtName'],
+        location['provinceName'],
+        station['city']['name'],
+        station['addressStreet']
+    )
+    return StationData(station['id'], station['stationName'], station_location)
 
 
 def map_sensor_json_to_object(sensor: dict) -> SensorData:
@@ -40,10 +46,9 @@ def convert_json_into_measurements_objects(measurements: list[dict]) -> list[Mea
 
 def get_all_stations() -> list[StationData]:
     try:
-        params = {'sort': 'Id'}
-        response = requests.get('https://api.gios.gov.pl/pjp-api/v1/rest/station/findAll', params=params)
+        response = requests.get('https://api.gios.gov.pl/pjp-api/rest/station/findAll')
         response.raise_for_status()
-        stations = response.json()['Lista stacji pomiarowych']
+        stations = response.json()
         return convert_json_into_stations_objects(stations)
     except requests.RequestException as e:
         print(f"An error occured while trying to fetch stations data: {e}")

@@ -8,32 +8,35 @@ import requests
 
 def test_map_station_json_into_object():
     station_json = {
-      "Identyfikator stacji": 77,
-      "Kod stacji": "DsPolKasztan",
-      "Nazwa stacji": "Polkowice, ul. Kasztanowa",
-      "WGS84 φ N": "51.502370",
-      "WGS84 λ E": "16.075051",
-      "Identyfikator miasta": 721,
-      "Nazwa miasta": "Polkowice",
-      "Gmina": "Polkowice",
-      "Powiat": "polkowicki",
-      "Województwo": "DOLNOŚLĄSKIE",
-      "Ulica": "ul. Kasztanowa 29"
+        "id": 114,
+        "stationName": "Wrocław, ul. Bartnicza",
+        "gegrLat": "51.115933",
+        "gegrLon": "17.141125",
+        "city": {
+            "id": 1064,
+            "name": "Wrocław",
+            "commune": {
+                "communeName": "Wrocław",
+                "districtName": "Wrocław",
+                "provinceName": "DOLNOŚLĄSKIE"
+            }
+            },
+        "addressStreet": "ul. Bartnicza"
     }
 
     station_data = map_station_json_to_object(station_json)
-    assert station_data.id == 77
-    assert station_data.name == 'Polkowice, ul. Kasztanowa'
-    assert station_data.location.city == 'Polkowice'
-    assert station_data.location.commune == 'Polkowice'
-    assert station_data.location.district == 'polkowicki'
+    assert station_data.id == 114
+    assert station_data.name == 'Wrocław, ul. Bartnicza'
+    assert station_data.location.city == 'Wrocław'
+    assert station_data.location.commune == 'Wrocław'
+    assert station_data.location.district == 'Wrocław'
     assert station_data.location.voivodeship == 'DOLNOŚLĄSKIE'
-    assert station_data.location.street == 'ul. Kasztanowa 29'
+    assert station_data.location.street == 'ul. Bartnicza'
 
 
-# def test_get_all_stations():
-#     stations = get_all_stations()
-#     assert len(stations) > 0
+def test_get_all_stations():
+    stations = get_all_stations()
+    assert len(stations) > 0
 
 
 def test_map_sensor_json_into_object():
