@@ -30,7 +30,6 @@
       git:
         repo: https://github.com/dominika232323/PIS_Air_Quality.git
         dest: /home/{{ ansible_user }}/PIS-proj
-        version: deployment
         update: yes
 
     - name: add docker public key
