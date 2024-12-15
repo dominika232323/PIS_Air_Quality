@@ -9,8 +9,9 @@
   tasks:
 
     - name: upgrade apt
-      shell: apt upgrade -y
-      shell: apt update -y
+      shell: |
+        apt upgrade -y
+        apt update -y
       become: yes
 
     - name: Install pip for Python 3
