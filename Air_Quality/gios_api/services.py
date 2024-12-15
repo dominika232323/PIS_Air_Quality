@@ -23,9 +23,12 @@ def map_measurement_json_to_object(measurement: dict) -> Measurement:
     try:
         measurement_date = measurement['Data']
         measurement_date = datetime.strptime(measurement_date, "%Y-%m-%d %H:%M:%S")
-        return Measurement(measurement_date, float(measurement['Wartość']))
-    except TypeError as T_err:
-        print(f"Data not complete - value is Null {T_err}")
+        value = float(measurement['Wartość'])
+        if value < 0:
+            raise ValueError("Value cannot be negative")
+        return Measurement(measurement_date, value)
+    except (ValueError, TypeError, KeyError) as err:
+        print(f"Bad Data error: {err}")
         return Measurement(None, -1)
 
 

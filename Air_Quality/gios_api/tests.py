@@ -2,7 +2,7 @@ import pytest
 from django.urls import reverse
 from gios_api.services import (map_station_json_to_object, get_all_stations,
                                get_station_sensors, map_sensor_json_to_object,
-                               get_current_sensor_measurements)
+                               get_current_sensor_measurements, map_measurement_json_to_object)
 import requests
 
 
@@ -92,3 +92,36 @@ def test_get_current_station_mesurements_execption(monkeypatch):
 
     result = get_current_sensor_measurements(55)
     assert result == []
+
+
+def test_map_mesurements_execption_bad_date():
+    measurement = {
+      "Kod stanowiska": "Whatever",
+      "Data": "This is a very bad Date",
+      "Wartość": 41.8
+    }
+    mes = map_measurement_json_to_object(measurement)
+    assert mes.date is None
+    assert mes.value == -1
+
+
+def test_map_mesurements_execption_negative_value():
+    measurement = {
+      "Kod stanowiska": "Whatever",
+      "Data": "2024-12-14 20:00:00",
+      "Wartość": -58
+    }
+    mes = map_measurement_json_to_object(measurement)
+    assert mes.date is None
+    assert mes.value == -1
+
+
+def test_map_mesurements_execption_null_value():
+    measurement = {
+      "Kod stanowiska": "Whatever",
+      "Data": "2024-12-14 20:00:00",
+      "Wartość": "null"
+    }
+    mes = map_measurement_json_to_object(measurement)
+    assert mes.date is None
+    assert mes.value == -1
