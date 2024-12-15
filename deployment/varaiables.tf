@@ -12,7 +12,7 @@ variable "admin_username" {
 variable "admin_password" {
   description = "Administrator password for the VMs"
   type        = string
-  default     = "ChangeMe123!"
+  default     = "admin"
 }
 
 variable "open_ports" {
