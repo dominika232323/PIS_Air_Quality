@@ -36,24 +36,23 @@ run:
 stop_db:
 	docker compose -f ./database/docker-compose.yml down
 
-#Run application with one command:
-up: migrations start_db run
+stop_server:
+	pkill -f runserver
 
-#Make migrations
+#Run application with one command:
+up: requirements migrations start_db run
+
+#Virtualenv Make migrations
 migrations-venv:
 	../venv/bin/python3 ./Air_Quality/manage.py migrate
 
-#Start database
-start_db-venv:
-	docker compose -f ./database/docker-compose.yml up -d
-
-#Run Django server on http://localhost:8000/
+#Vitrualenv Run Django server on http://localhost:8000/
 run-venv:
-	../venv/bin/python3 ./Air_Quality/manage.py runserver
+	nohup ../venv/bin/python3 ./Air_Quality/manage.py runserver &
 
 
-#Run application with one command:
-up-venv: migrations-venv start_db-venv run-venv
+#Run application with one command in virtualenv:
+up-venv: migrations-venv start_db run-venv
 
 #Stop application:
-down: stop_db
+down: stop_db stop_server
