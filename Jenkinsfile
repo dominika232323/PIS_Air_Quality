@@ -1,7 +1,7 @@
 pipeline {
     agent {
         node {
-            label 'agent-terraform'
+            label 'agent-ansible'
             }
       }
     triggers{
