@@ -39,7 +39,7 @@ pipeline {
             echo 'Deliver....'
             sh '''
             cd deployment
-            terraform apply -auto-approve
+            ansible-playbook -i inventory.yml playbook.yml
             '''
         }
     }
