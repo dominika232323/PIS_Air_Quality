@@ -46,6 +46,30 @@
         version: deployment
         update: yes
 
+    - name: add docker public key
+      shell: |
+       apt-get install ca-certificates curl -y
+       install -m 0755 -d /etc/apt/keyrings
+       curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+       chmod a+r /etc/apt/keyrings/docker.asc
+      become: yes
+
+    - name: add docker apt repo
+      shell: |
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+        apt-get update -y
+      become: yes
+
+    - name: install docker
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+      become: yes
+
     - name: install python3 virtualenv
       apt:
         name: python3.12-venv
@@ -72,7 +96,21 @@
       shell:
         ./venv/bin/pip3 install -r /home/{{ ansible_user }}/PIS-proj/requirements.txt
 
-    - name: run app
+    # - name: run app
+    #   make:
+    #     chdir: /home/{{ ansible_user }}/PIS-proj/
+    #     target: up-venv
+
+    - name: make migrations
       make:
         chdir: /home/{{ ansible_user }}/PIS-proj/
-        target: up-venv
+        target: migrations-venv
+
+    - name: start db
+      make:
+        chdir: /home/{{ ansible_user }}/PIS-proj/
+        target: start_db
+
+  # running through make causes playbook to not finish - runs in terminal
+    - name: run server
+      shell: nohup ../venv/bin/python3 ./Air_Quality/manage.py runserver &
