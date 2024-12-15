@@ -1,7 +1,7 @@
 pipeline {
     agent {
         node {
-            label 'python-agent'
+            label 'agent-ansible'
             }
       }
     triggers{
@@ -38,7 +38,8 @@ pipeline {
         steps {
             echo 'Deliver....'
             sh '''
-            echo "doing delivery stuff.."
+            cd deployment
+            ansible-playbook -i inventory.yml playbook.yml
             '''
         }
     }
