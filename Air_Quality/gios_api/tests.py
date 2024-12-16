@@ -94,6 +94,13 @@ def test_get_current_station_mesurements_execption(monkeypatch):
     assert result == []
 
 
+def test_get_current_station_mesurements_from_manual_sensor(capsys):
+    result = get_current_sensor_measurements(276)
+    captured = capsys.readouterr()
+    assert 'Error: Trying to fetch current measurements from manual-type sensor: API-ERR-100003' in captured.out
+    assert result == []
+
+
 def test_map_mesurements_execption_bad_date():
     measurement = {
       "Kod stanowiska": "Whatever",

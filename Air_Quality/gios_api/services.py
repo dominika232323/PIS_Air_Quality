@@ -76,6 +76,13 @@ def get_current_sensor_measurements(sensor_id: int) -> list[Measurement]:
         response.raise_for_status()
         measurements = response.json()['Lista danych pomiarowych']
         return convert_json_into_measurements_objects(measurements)
+    except requests.exceptions.HTTPError:
+        if response.status_code == 400:
+            error_details = response.json()
+            error_code = error_details["error_code"]
+            if error_code == "API-ERR-100003":
+                print(f"Error: Trying to fetch current measurements from manual-type sensor: {error_code}")
+        return []
     except requests.RequestException as e:
         print(f"An error occured while trying to fetch sensor's measurements: {e}")
         return []
