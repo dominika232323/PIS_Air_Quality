@@ -51,6 +51,10 @@ run-venv:
 	nohup ../venv/bin/python3 ./Air_Quality/manage.py runserver &
 
 
+#Vitrualenv Run Django server on http://localhost:8000/
+run-az:
+	nohup ../venv/bin/python3 ./Air_Quality/manage.py runserver 0.0.0.0:8000 &
+
 #Run application with one command in virtualenv:
 up-venv: migrations-venv start_db run-venv
 
