@@ -30,7 +30,7 @@ start_db:
 
 #Run Django server on http://localhost:8000/
 run:
-	python3 ./Air_Quality/manage.py runserver
+	python3 ./Air_Quality/manage.py runserver &
 
 #Stop database
 stop_db:
@@ -39,8 +39,12 @@ stop_db:
 stop_server:
 	pkill -f runserver
 
+#Run Streamlit app
+run_streamlit:
+	streamlit run ./Air_Quality/app/app.py
+
 #Run application with one command:
-up: requirements migrations start_db run
+up: requirements migrations start_db run run_streamlit
 
 #Virtualenv Make migrations
 migrations-venv:
