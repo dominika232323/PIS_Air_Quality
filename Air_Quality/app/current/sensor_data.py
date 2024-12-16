@@ -25,7 +25,7 @@ else:
     for sensor in sensors:
         sensor_data = fetch_sensor_measurements(sensor.id)
         if sensor_data:
-            latest_measurement = sensor_data[-1]
+            latest_measurement = sensor_data[0]
             if latest_measurement:
                 sensor_results.append({
                     "Sensor": sensor.indicator,
@@ -33,7 +33,7 @@ else:
                     "Data": latest_measurement.date,
                     "Wartość": latest_measurement.value
                 })
-                
+
     results_df = pd.DataFrame(sensor_results)
     st.write(f"### Najnowsze dane z sensorów na stacji {station_id}. {station_name}")
     gb_sensors = GridOptionsBuilder.from_dataframe(results_df)

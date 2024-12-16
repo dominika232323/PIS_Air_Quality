@@ -71,8 +71,7 @@ def get_station_sensors(station_id: int) -> list[SensorData]:
 
 def get_current_sensor_measurements(sensor_id: int) -> list[Measurement]:
     try:
-        params = {'sort': 'Data'}
-        response = requests.get(f'https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/{sensor_id}', params=params)
+        response = requests.get(f'https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/{sensor_id}')
         response.raise_for_status()
         measurements = response.json()['Lista danych pomiarowych']
         return convert_json_into_measurements_objects(measurements)
