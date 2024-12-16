@@ -18,5 +18,5 @@ variable "admin_password" {
 variable "open_ports" {
   description = "List of ports to open in the Network Security Group"
   type        = list(number)
-  default     = [22, 80, 3128]
+  default     = [22, 80, 3128, 8000, 8501]
 }

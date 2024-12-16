@@ -91,4 +91,4 @@
     - name: start application in background
       make:
         chdir: /home/{{ ansible_user }}/PIS-proj/
-        target: run-venv
+        target: run-az
