@@ -9,3 +9,6 @@ def get_all_stations(request):
 
 def get_station_info(request, station_id: int):
     return services.get_station_info(station_id)
+
+def streamlit_app(request):
+    return render(request, 'streamlit_app.html')

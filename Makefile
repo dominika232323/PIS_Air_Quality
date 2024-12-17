@@ -43,6 +43,12 @@ stop_server:
 run_streamlit:
 	streamlit run ./Air_Quality/app/app.py
 
+runstreamlit-az:
+	streamlit run your_streamlit_app.py --server.address 0.0.0.0 --server.port 8501 &
+
+stop_streamlit:
+	pkill -f streamlit
+
 #Run application with one command:
 up: requirements migrations start_db run run_streamlit
 
@@ -66,7 +72,7 @@ run-az:
 up-venv: migrations-venv start_db run-venv
 
 #Run application with one command on az vm:
-up-az: migrations-venv start_db run-az
+up-az: migrations-venv start_db run-az runstreamlit-az
 
 #Stop application:
-down: stop_db stop_server
+down: stop_db stop_server stop_streamlit
