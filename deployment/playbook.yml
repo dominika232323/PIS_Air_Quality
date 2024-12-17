@@ -95,6 +95,6 @@
         target: run-az
 
     - name: start streamlit in background
-      make:
+      shell: make runstreamlit-az
+      args:
         chdir: /home/{{ ansible_user }}/PIS-proj/
-        target: runstreamlit-az
