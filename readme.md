@@ -89,6 +89,7 @@ Celem projektu jest stworzenie systemu informatycznego do przechowywania, przetw
 - **Jira**: system zarządzania zadaniami.
 - **GitHub**: repozytorium kodu.
 - **Pytest**: framework do testowania.
-- **Jenkins**: automatyczne budowanie, testowanie i wdrażanie aplikacji.
+- **Jenkins**: automatyczne budowanie i testowanie.
+- **Azure**: wdrażanie aplikacji.
 
 ---
