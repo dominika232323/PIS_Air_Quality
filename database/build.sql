@@ -66,7 +66,7 @@ CREATE TABLE sensors
 CREATE TABLE measurements
 (
     id         SERIAL PRIMARY KEY,
-    date       TIMESTAMP,
+    date       TIMESTAMP        NOT NULL,
     value      DOUBLE PRECISION NOT NULL,
     param_code VARCHAR(50)      NOT NULL,
     sensor_id  INT,
@@ -74,3 +74,28 @@ CREATE TABLE measurements
     FOREIGN KEY (sensor_id) REFERENCES sensors (id) ON DELETE CASCADE
 );
 
+CREATE TABLE air_quality_levels
+(
+    id         SERIAL PRIMARY KEY,
+    level_name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE air_quality
+(
+    id             SERIAL PRIMARY KEY,
+    station_id     INT,
+    calculate_date TIMESTAMP NOT NULL,
+    quality_index  INT,
+    source_date    TIMESTAMP,
+    FOREIGN KEY (station_id) REFERENCES stations (id) ON DELETE CASCADE,
+    FOREIGN KEY (quality_index) REFERENCES air_quality_levels (id) ON DELETE CASCADE
+);
+
+INSERT INTO air_quality_levels (id, level_name)
+VALUES (-1, 'Brak indeksu'),
+       (0, 'Bardzo dobry'),
+       (1, 'Dobry'),
+       (2, 'Umiarkowany'),
+       (3, 'Dostateczny'),
+       (4, 'Zły'),
+       (5, 'Bardzo zły');

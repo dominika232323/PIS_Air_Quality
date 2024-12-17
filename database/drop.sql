@@ -1,3 +1,5 @@
+DROP TABLE air_quality_levels;
+DROP TABLE air_quality;
 DROP TABLE measurements;
 DROP TABLE sensors;
 DROP TABLE params;
