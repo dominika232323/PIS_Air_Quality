@@ -90,6 +90,5 @@ Celem projektu jest stworzenie systemu informatycznego do przechowywania, przetw
 - **GitHub**: repozytorium kodu.
 - **Pytest**: framework do testowania.
 - **Jenkins**: automatyczne budowanie, testowanie i wdrażanie aplikacji.
-- **Nexus**: repozytorium artefaktów.
 
 ---
