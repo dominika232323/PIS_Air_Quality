@@ -1,3 +1,6 @@
+DROP TABLE measurements;
+DROP TABLE sensors;
+DROP TABLE params;
 DROP TABLE stations;
 DROP TABLE addresses;
 DROP TABLE cities;
