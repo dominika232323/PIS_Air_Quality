@@ -22,10 +22,9 @@ Celem projektu jest stworzenie systemu informatycznego do przechowywania, przetw
 - Wyświetlanie wykresu historii wartości parametrów na wybranej stacji w formie wykresu z róznymi przedziałami czasowymi (dla ostatniego dnia, tygodnia, miesiąca, roku i całej historii) i oznaczonymi wartościami najmniejszymi, największymi i przekraczającymi normy
 
 ### 5. Agregacja danych
-- Wyświetlanie średnich wartości parametrów dla różnych poziomów administracyjnych:
+- Wyświetlanie zagregowanych wartości parametrów dla różnych poziomów administracyjnych:
   - dla ostatniego pomiaru,
   - dla wybranego przedziału czasowego.
-- Wyświetlanie zagregowanych granicznych wartosci parametrów dla różnych poziomów administracyjnych i przedziaów czasowych.
 
 ### 6. Monitorowanie norm jakości powietrza
 - Wyświetlanie aktualnych ostrzeżeń o przekroczonych normach jakości powietrza.
