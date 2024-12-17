@@ -82,13 +82,35 @@ CREATE TABLE air_quality_levels
 
 CREATE TABLE air_quality
 (
-    id             SERIAL PRIMARY KEY,
-    station_id     INT,
-    calculate_date TIMESTAMP NOT NULL,
-    quality_index  INT,
-    source_date    TIMESTAMP,
+    id                  SERIAL PRIMARY KEY,
+    station_id          INT,
+    calculate_date      TIMESTAMP,
+    quality_level       INT,
+    source_date         TIMESTAMP,
+    so2_calculate_date  TIMESTAMP,
+    so2_quality_level   INT,
+    so2_source_date     TIMESTAMP,
+    no2_calculate_date  TIMESTAMP,
+    no2_quality_level   INT,
+    no2_source_date     TIMESTAMP,
+    pm10_calculate_date TIMESTAMP,
+    pm10_quality_level  INT,
+    pm10_source_date    TIMESTAMP,
+    pm25_calculate_date TIMESTAMP,
+    pm25_quality_level  INT,
+    pm25_source_date    TIMESTAMP,
+    o3_calculate_date   TIMESTAMP,
+    o3_quality_level    INT,
+    o3_source_date      TIMESTAMP,
+    index_status        BOOLEAN,
+    critical_param      VARCHAR(50),
     FOREIGN KEY (station_id) REFERENCES stations (id) ON DELETE CASCADE,
-    FOREIGN KEY (quality_index) REFERENCES air_quality_levels (id) ON DELETE CASCADE
+    FOREIGN KEY (quality_level) REFERENCES air_quality_levels (id) ON DELETE CASCADE,
+    FOREIGN KEY (so2_quality_level) REFERENCES air_quality_levels (id) ON DELETE CASCADE,
+    FOREIGN KEY (no2_quality_level) REFERENCES air_quality_levels (id) ON DELETE CASCADE,
+    FOREIGN KEY (pm10_quality_level) REFERENCES air_quality_levels (id) ON DELETE CASCADE,
+    FOREIGN KEY (pm25_quality_level) REFERENCES air_quality_levels (id) ON DELETE CASCADE,
+    FOREIGN KEY (o3_quality_level) REFERENCES air_quality_levels (id) ON DELETE CASCADE
 );
 
 INSERT INTO air_quality_levels (id, level_name)
