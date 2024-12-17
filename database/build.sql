@@ -30,8 +30,10 @@ CREATE TABLE cities
 
 CREATE TABLE addresses
 (
-    id   SERIAL PRIMARY KEY,
-    name VARCHAR(255)
+    id      SERIAL PRIMARY KEY,
+    name    VARCHAR(255),
+    city_id INT,
+    FOREIGN KEY (city_id) REFERENCES cities (id)
 );
 
 CREATE TABLE stations
@@ -40,8 +42,6 @@ CREATE TABLE stations
     station_name VARCHAR(255)     NOT NULL,
     latitude     DOUBLE PRECISION NOT NULL,
     longitude    DOUBLE PRECISION NOT NULL,
-    city_id      INT              NOT NULL,
     address_id   INT,
-    FOREIGN KEY (city_id) REFERENCES cities (id),
     FOREIGN KEY (address_id) REFERENCES addresses (id)
 );
