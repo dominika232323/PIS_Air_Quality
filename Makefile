@@ -44,7 +44,7 @@ run_streamlit:
 	streamlit run ./Air_Quality/app/app.py
 
 runstreamlit-az:
-	nohup streamlit run ./Air_Quality/app/app.py --server.address 0.0.0.0 --server.port 8501 &
+	nohup ../venv/bin/python3 -m streamlit run ./Air_Quality/app/app.py --server.address 0.0.0.0 --server.port 8501 &
 
 stop_streamlit:
 	pkill -f streamlit
