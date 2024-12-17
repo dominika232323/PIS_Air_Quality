@@ -44,7 +44,7 @@ run_streamlit:
 	streamlit run ./Air_Quality/app/app.py
 
 runstreamlit-az:
-	streamlit run your_streamlit_app.py --server.address 0.0.0.0 --server.port 8501 &
+	../venv/bin/python3 streamlit run your_streamlit_app.py --server.address 0.0.0.0 --server.port 8501 &
 
 stop_streamlit:
 	pkill -f streamlit
@@ -64,9 +64,6 @@ run-venv:
 run-az:
 	nohup ../venv/bin/python3 ./Air_Quality/manage.py runserver 0:8000 &
 
-#Vitrualenv Run Django server on http://localhost:8000/
-run-az:
-	nohup ../venv/bin/python3 ./Air_Quality/manage.py runserver 0.0.0.0:8000 &
 
 #Run application with one command in virtualenv:
 up-venv: migrations-venv start_db run-venv
