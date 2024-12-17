@@ -30,6 +30,7 @@
       git:
         repo: https://github.com/dominika232323/PIS_Air_Quality.git
         dest: /home/{{ ansible_user }}/PIS-proj
+        version: streamlit-on-django-test
         update: yes
 
     - name: add docker public key
@@ -92,3 +93,8 @@
       make:
         chdir: /home/{{ ansible_user }}/PIS-proj/
         target: run-az
+
+    - name: start streamlit in background
+      shell: nohup ../venv/bin/python3 -m streamlit run ./Air_Quality/app/app.py --server.address 0.0.0.0 --server.port 8501 &
+      args:
+        chdir: /home/{{ ansible_user }}/PIS-proj/
