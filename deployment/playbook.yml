@@ -95,6 +95,6 @@
         target: run-az
 
     - name: start streamlit in background
-      shell: make runstreamlit-az
+      shell: nohup ../venv/bin/python3 -m streamlit run ./Air_Quality/app/app.py --server.address 0.0.0.0 --server.port 8501 &
       args:
         chdir: /home/{{ ansible_user }}/PIS-proj/
