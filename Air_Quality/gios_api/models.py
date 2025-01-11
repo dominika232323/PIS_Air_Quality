@@ -54,8 +54,8 @@ class AirQuality(models.Model):
     critical_param = models.CharField(max_length=50)
 
 class AirQualityPollutant(models.Model):
-    air_quality = models.ForeignKey(Air_quality)
+    air_quality = models.ForeignKey(AirQuality)
     parameter = models.ForeignKey(Parameter)
     calculate_date = models.DateField()
-    quality_level = models.ForeignKey(Air_quality_level)
+    quality_level = models.ForeignKey(AirQualityLevel)
     source_date = models.DateField()
