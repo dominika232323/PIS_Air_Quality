@@ -26,3 +26,18 @@ class Station(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     address_id = models.ForeignKey(Address)
+
+class Parameter(models.Model):
+    name = models.CharField(max_length=255)
+    formula = models.CharField(max_length=50)
+    code = models.CharField(max_length=50)
+
+class Sensor(models.Model):
+    station_id = models.ForeignKey(Station)
+    parameter = models.ForeignKey(Parameter)
+
+class Measurement(models.Model):
+    date = models.DateField()
+    value = models.FloatField()
+    param_code = models.ForeignKey(Parameter)
+    sensor = models.ForeignKey(Sensor)
