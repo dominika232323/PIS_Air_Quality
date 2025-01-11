@@ -7,25 +7,25 @@ class Province(models.Model):
 
 class District(models.Model):
     name = models.CharField(max_length=100)
-    commune_id = models.ForeignKey(Province)
+    commune = models.ForeignKey(Province)
 
 class Commune(models.Model):
     name = models.CharField(max_length=100)
-    commune_id = models.ForeignKey(District)
+    commune = models.ForeignKey(District)
 
 class City(models.Model):
     name = models.CharField(max_length=100)
-    commune_id = models.ForeignKey(Commune)
+    commune = models.ForeignKey(Commune)
 
 class Address(models.Model):
     name = models.CharField(max_length=255)
-    city_id = models.ForeignKey(City)
+    city = models.ForeignKey(City)
 
 class Station(models.Model):
     station_name = models.CharField(max_length=255)
     latitude = models.FloatField()
     longitude = models.FloatField()
-    address_id = models.ForeignKey(Address)
+    address = models.ForeignKey(Address)
 
 class Parameter(models.Model):
     name = models.CharField(max_length=255)
@@ -33,7 +33,7 @@ class Parameter(models.Model):
     code = models.CharField(max_length=50)
 
 class Sensor(models.Model):
-    station_id = models.ForeignKey(Station)
+    station = models.ForeignKey(Station)
     parameter = models.ForeignKey(Parameter)
 
 class Measurement(models.Model):
