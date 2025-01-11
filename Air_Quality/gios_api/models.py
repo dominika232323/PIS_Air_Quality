@@ -41,3 +41,21 @@ class Measurement(models.Model):
     value = models.FloatField()
     param_code = models.ForeignKey(Parameter)
     sensor = models.ForeignKey(Sensor)
+
+class Air_quality_level(models.Model):
+    level_name = models.CharField(max_length=50)
+
+class Air_quality(models.Model):
+    station = models.ForeignKey(Station)
+    calculate_date = models.DateField()
+    quality_level = models.IntegerField()
+    source_date = models.DateField()
+    index_status = models.BooleanField()
+    critical_param = models.CharField(max_length=50)
+
+class Air_quality_pollutants(models.Model):
+    air_quality = models.ForeignKey(Air_quality)
+    parameter = models.ForeignKey(Parameter)
+    calculate_date = models.DateField()
+    quality_level = models.ForeignKey(Air_quality_level)
+    source_date = models.DateField()
