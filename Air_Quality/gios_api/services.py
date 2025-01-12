@@ -1,7 +1,7 @@
 import requests
 from gios_api.schemas import StationData, SensorData, Location, Measurement
 from datetime import datetime
-from gios_api.errors import InvalidDateFormatError
+from gios_api.errors import InvalidDateFormatError, TooWideDateRangeError
 
 def map_station_json_to_object(station: dict) -> StationData:
     location = station['city']['commune']
@@ -52,6 +52,16 @@ def check_date_format(date: str, valid_format: str='%Y-%m-%d %H:%M'):
     except ValueError:
         raise InvalidDateFormatError(f'Invalid Date format! Expected Format: {valid_format}. Got: {date}')
 
+def get_days_between_two_dates(first_date: datetime, second_date: datetime) -> int:
+    diff = abs(first_date - second_date)
+    return diff.days
+
+def check_date_wide(start_date: str, end_date: str, date_format: str='%Y-%m-%d %H:%M'):
+    start, end = datetime.strptime(start_date, date_format), datetime.strptime(end_date, date_format)
+    MAX_DIFF = 366
+    if get_days_between_two_dates(start, end) > 366:
+        raise TooWideDateRangeError(f'Too Wide Range between Dates! Max diff is: {MAX_DIFF}')
+
 def get_all_stations() -> list[StationData]:
     try:
         response = requests.get('https://api.gios.gov.pl/pjp-api/rest/station/findAll')
@@ -94,7 +104,9 @@ def get_current_sensor_measurements(sensor_id: int) -> list[Measurement]:
 
 def get_archival_sensor_measurements(sensor_id: int, date_from: str, date_to: str) -> list[Measurement]:
     try:
-        check_date_format(date_from) and check_date_format(date_to)
+        check_date_format(date_from)
+        check_date_format(date_to)
+        check_date_wide(date_from, date_to)
         params = {"dateFrom": date_from, "dateTo": date_to}
         response = requests.get(f'https://api.gios.gov.pl/pjp-api/v1/rest/archivalData/getDataBySensor/{sensor_id}', params=params)
         print(response.url)
@@ -102,6 +114,8 @@ def get_archival_sensor_measurements(sensor_id: int, date_from: str, date_to: st
         measurements = response.json()['Lista archiwalnych wyników pomiarów']
         return convert_json_into_measurements_objects(measurements)
     except InvalidDateFormatError:
+        return []
+    except TooWideDateRangeError:
         return []
     except requests.RequestException as e:
         print(f"An error occured while trying to fetch sensor's archival measurements: {e}")
