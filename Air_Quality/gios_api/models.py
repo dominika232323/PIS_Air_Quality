@@ -7,11 +7,11 @@ class Province(models.Model):
 
 class District(models.Model):
     name = models.CharField(max_length=100)
-    commune = models.ForeignKey(Province)
+    province = models.ForeignKey(Province)
 
 class Commune(models.Model):
     name = models.CharField(max_length=100)
-    commune = models.ForeignKey(District)
+    district = models.ForeignKey(District)
 
 class City(models.Model):
     name = models.CharField(max_length=100)
@@ -48,7 +48,7 @@ class AirQualityLevel(models.Model):
 class AirQuality(models.Model):
     station = models.ForeignKey(Station)
     calculate_date = models.DateField()
-    quality_level = models.IntegerField()
+    quality_level = models.ForeignKey(AirQualityLevel)
     source_date = models.DateField()
     index_status = models.BooleanField()
     critical_param = models.CharField(max_length=50)
