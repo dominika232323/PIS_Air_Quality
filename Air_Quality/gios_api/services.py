@@ -28,7 +28,7 @@ def map_measurement_json_to_object(measurement: dict) -> Measurement:
             raise ValueError("Value cannot be negative")
         return Measurement(measurement_date, value)
     except (ValueError, TypeError, KeyError) as err:
-        print(f"Bad Data error: {err}")
+        print(f"Warning Ivalid Data: {err}")
         return Measurement(None, -1)
 
 
@@ -80,8 +80,21 @@ def get_current_sensor_measurements(sensor_id: int) -> list[Measurement]:
             error_details = response.json()
             error_code = error_details["error_code"]
             if error_code == "API-ERR-100003":
-                print(f"Error: Trying to fetch current measurements from manual-type sensor: {error_code}")
+                print(f"Warning: Trying to fetch current measurements from manual-type sensor: {error_code}")
         return []
     except requests.RequestException as e:
         print(f"An error occured while trying to fetch sensor's measurements: {e}")
+        return []
+
+
+def get_archival_sensor_measurements(sensor_id: int, date_from: str, date_to: str) -> list[Measurement]:
+    try:
+        params = {"dateFrom": date_from, "dateTo": date_to}
+        response = requests.get(f'https://api.gios.gov.pl/pjp-api/v1/rest/archivalData/getDataBySensor/{sensor_id}', params=params)
+        print(response.url)
+        response.raise_for_status()
+        measurements = response.json()['Lista archiwalnych wyników pomiarów']
+        return convert_json_into_measurements_objects(measurements)
+    except requests.RequestException as e:
+        print(f"An error occured while trying to fetch sensor's archival measurements: {e}")
         return []

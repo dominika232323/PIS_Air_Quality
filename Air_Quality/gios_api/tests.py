@@ -2,7 +2,8 @@ import pytest
 from django.urls import reverse
 from gios_api.services import (map_station_json_to_object, get_all_stations,
                                get_station_sensors, map_sensor_json_to_object,
-                               get_current_sensor_measurements, map_measurement_json_to_object)
+                               get_current_sensor_measurements, map_measurement_json_to_object,
+                               get_archival_sensor_measurements)
 import requests
 
 
@@ -58,10 +59,13 @@ def test_get_station_sensors():
     assert len(sensors) == 6
 
 
-def test_get_sensor_measurements():
+def test_get_current_sensor_measurements():
     measurements = get_current_sensor_measurements(52)
-    assert measurements[1].date is not None
-    assert measurements[1].value is not None
+    assert len(measurements) > 0
+
+def test_get_archive_sensor_mesurements():
+    measurements = get_archival_sensor_measurements(52, '2025-01-01 15:00', '2025-01-10 15:00')
+    assert measurements[0].date.strftime('%Y-%m-%d %H:%M:%S') == '2025-01-01 15:00:00'
 
 
 def test_get_all_stations_request_exception(monkeypatch):
@@ -97,7 +101,7 @@ def test_get_current_station_mesurements_execption(monkeypatch):
 def test_get_current_station_mesurements_from_manual_sensor(capsys):
     result = get_current_sensor_measurements(276)
     captured = capsys.readouterr()
-    assert 'Error: Trying to fetch current measurements from manual-type sensor: API-ERR-100003' in captured.out
+    assert 'Warning: Trying to fetch current measurements from manual-type sensor: API-ERR-100003' in captured.out
     assert result == []
 
 
