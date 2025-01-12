@@ -1,9 +1,10 @@
 import pytest
+from gios_api.errors import InvalidDateFormatError
 from django.urls import reverse
 from gios_api.services import (map_station_json_to_object, get_all_stations,
                                get_station_sensors, map_sensor_json_to_object,
                                get_current_sensor_measurements, map_measurement_json_to_object,
-                               get_archival_sensor_measurements)
+                               get_archival_sensor_measurements, check_date_format)
 import requests
 
 
@@ -65,7 +66,7 @@ def test_get_current_sensor_measurements():
 
 def test_get_archive_sensor_mesurements():
     measurements = get_archival_sensor_measurements(52, '2025-01-01 15:00', '2025-01-10 15:00')
-    assert measurements[0].date.strftime('%Y-%m-%d %H:%M:%S') == '2025-01-01 15:00:00'
+    assert measurements[0].date.strftime('%Y-%m-%d %H:%M') == '2025-01-01 15:00'
 
 
 def test_get_all_stations_request_exception(monkeypatch):
@@ -136,3 +137,10 @@ def test_map_mesurements_execption_null_value():
     mes = map_measurement_json_to_object(measurement)
     assert mes.date is None
     assert mes.value == -1
+
+def test_check_date_format_correct():
+    check_date_format('2025-01-01 15:00')
+
+def test_check_date_format_exception():
+    with pytest.raises(InvalidDateFormatError, match='Invalid Date format! Expected Format: %Y-%m-%d %H:%M. Got: 12-01-2025 15:00'):
+        check_date_format('12-01-2025 15:00')

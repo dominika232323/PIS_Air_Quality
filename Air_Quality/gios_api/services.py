@@ -1,7 +1,7 @@
 import requests
 from gios_api.schemas import StationData, SensorData, Location, Measurement
 from datetime import datetime
-
+from gios_api.errors import InvalidDateFormatError
 
 def map_station_json_to_object(station: dict) -> StationData:
     location = station['city']['commune']
@@ -46,6 +46,11 @@ def convert_json_into_measurements_objects(measurements: list[dict]) -> list[Mea
     measurements_data = [map_measurement_json_to_object(measurement) for measurement in measurements]
     return measurements_data
 
+def check_date_format(date: str, valid_format: str='%Y-%m-%d %H:%M'):
+    try:
+        datetime.strptime(date, valid_format)
+    except ValueError:
+        raise InvalidDateFormatError(f'Invalid Date format! Expected Format: {valid_format}. Got: {date}')
 
 def get_all_stations() -> list[StationData]:
     try:
@@ -89,12 +94,15 @@ def get_current_sensor_measurements(sensor_id: int) -> list[Measurement]:
 
 def get_archival_sensor_measurements(sensor_id: int, date_from: str, date_to: str) -> list[Measurement]:
     try:
+        check_date_format(date_from) and check_date_format(date_to)
         params = {"dateFrom": date_from, "dateTo": date_to}
         response = requests.get(f'https://api.gios.gov.pl/pjp-api/v1/rest/archivalData/getDataBySensor/{sensor_id}', params=params)
         print(response.url)
         response.raise_for_status()
         measurements = response.json()['Lista archiwalnych wyników pomiarów']
         return convert_json_into_measurements_objects(measurements)
+    except InvalidDateFormatError:
+        return []
     except requests.RequestException as e:
         print(f"An error occured while trying to fetch sensor's archival measurements: {e}")
         return []
