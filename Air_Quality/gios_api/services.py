@@ -1,6 +1,6 @@
 import requests
 from gios_api.schemas import StationData, SensorData, Location, Measurement
-from datetime import datetime
+from datetime import datetime, timedelta
 from gios_api.errors import InvalidDateFormatError, TooWideDateRangeError
 
 def map_station_json_to_object(station: dict) -> StationData:
@@ -83,8 +83,8 @@ def get_all_stations() -> list[StationData]:
 
 def get_station_sensors(station_id: int) -> list[SensorData]:
     try:
-        response = fetch_data_from_api(f'https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{station_id}')
-        sensors = response['Lista stanowisk pomiarowych dla podanej stacji']
+        data = fetch_data_from_api(f'https://api.gios.gov.pl/pjp-api/v1/rest/station/sensors/{station_id}')
+        sensors = data['Lista stanowisk pomiarowych dla podanej stacji']
         return convert_json_into_sensors_objects(sensors)
     except requests.RequestException as e:
         print(f"An error occured while trying to fetch sensors: {e}")
@@ -93,8 +93,8 @@ def get_station_sensors(station_id: int) -> list[SensorData]:
 
 def get_current_sensor_measurements(sensor_id: int) -> list[Measurement]:
     try:
-        response = fetch_data_from_api(f'https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/{sensor_id}')
-        measurements = response['Lista danych pomiarowych']
+        data = fetch_data_from_api(f'https://api.gios.gov.pl/pjp-api/v1/rest/data/getData/{sensor_id}')
+        measurements = data['Lista danych pomiarowych']
         return convert_json_into_measurements_objects(measurements)
     except requests.exceptions.HTTPError as http_err:
         if http_err.response.status_code == 400:
@@ -112,8 +112,8 @@ def get_archival_sensor_measurements(sensor_id: int, date_from: str, date_to: st
     try:
         validate_dates(date_from, date_to)
         params = {"dateFrom": date_from, "dateTo": date_to}
-        response = fetch_data_from_api(f'https://api.gios.gov.pl/pjp-api/v1/rest/archivalData/getDataBySensor/{sensor_id}', params)
-        measurements = response['Lista archiwalnych wyników pomiarów']
+        data = fetch_data_from_api(f'https://api.gios.gov.pl/pjp-api/v1/rest/archivalData/getDataBySensor/{sensor_id}', params)
+        measurements = data['Lista archiwalnych wyników pomiarów']
         return convert_json_into_measurements_objects(measurements)
     except InvalidDateFormatError:
         return []
@@ -125,10 +125,15 @@ def get_archival_sensor_measurements(sensor_id: int, date_from: str, date_to: st
 
 def get_last_n_days_sensor_measurements(sensor_id: int, n_days: int) -> list[Measurement]:
     try:
+        current_date = datetime.now()
+        date_n_days_before = current_date - timedelta(days=n_days)
+        check_date_wide(current_date.strftime('%Y-%m-%d %H:%M'), date_n_days_before.strftime('%Y-%m-%d %H:%M'))
         params = {"dayNumber": n_days}
-        response = fetch_data_from_api(f'https://api.gios.gov.pl/pjp-api/v1/rest/archivalData/getDataBySensor/{sensor_id}', params)
-        measurements = response['Lista archiwalnych wyników pomiarów']
+        data = fetch_data_from_api(f'https://api.gios.gov.pl/pjp-api/v1/rest/archivalData/getDataBySensor/{sensor_id}', params)
+        measurements = data['Lista archiwalnych wyników pomiarów']
         return convert_json_into_measurements_objects(measurements)
+    except TooWideDateRangeError:
+        return []
     except requests.RequestException as e:
         print(f"An error occured while trying to fetch sensor's archival measurements: {e}")
         return []

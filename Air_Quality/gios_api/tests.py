@@ -5,7 +5,7 @@ from gios_api.services import (map_station_json_to_object, get_all_stations,
                                get_station_sensors, map_sensor_json_to_object,
                                get_current_sensor_measurements, map_measurement_json_to_object,
                                get_archival_sensor_measurements, check_date_format,
-                               check_date_wide)
+                               check_date_wide, get_last_n_days_sensor_measurements)
 import requests
 
 
@@ -114,6 +114,10 @@ def test_get_archive_sensor_mesurements():
     measurements = get_archival_sensor_measurements(52, '2025-01-01 15:00', '2025-01-10 15:00')
     assert measurements[0].date.strftime('%Y-%m-%d %H:%M') == '2025-01-01 15:00'
 
+def test_get_archive_sensor_mesurements_from_last_n_days():
+    measurements = get_last_n_days_sensor_measurements(52, 7)
+    assert len(measurements) > 0
+
 def test_get_all_stations_request_exception(monkeypatch):
     def mock_get(*args, **kwargs):
         raise requests.RequestException("API Error")
@@ -152,6 +156,9 @@ def test_get_archive_measurements_too_wide_range():
     result = get_archival_sensor_measurements(52, '2022-01-01 15:00', '2025-01-01 15:00')
     assert result == []
 
+def test_get_archive_measurements_from_last_n_days_too_wide_range():
+    result = get_last_n_days_sensor_measurements(52, 400)
+    assert result == []
 
 def test_get_current_station_mesurements_from_manual_sensor(capsys):
     result = get_current_sensor_measurements(276)
