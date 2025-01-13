@@ -67,7 +67,9 @@ POSTGRES_DB=airqualitydb
 ### Lista pozostałych poleceń
 - `make migrations` - stosuje migracje (po dodaniu/ zmienieniu modelu)
 - `make start_db` - uruchamia kontener z bazą danych
+- `make build_db` - wykonuje skrypt *./database/build.sql*
 - `make stop_db` - zatrzymuje kontener z bazą danych
+- `make clean_db` - usuwa Docker Volume database_pgdata_volume
 - `make run` - uruchamia serwer Django
 
 ---
