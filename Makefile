@@ -2,7 +2,7 @@
 COV_FAIL=--cov-fail-under=80
 
 # Targets
-.PHONY: requirements migrations tests coverage clean start_db run stop_db up down
+.PHONY: requirements migrations tests coverage clean start_db build_db run stop_db clean_db up down
 
 #Install requirements
 requirements:
