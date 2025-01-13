@@ -28,6 +28,11 @@ clean:
 start_db:
 	docker compose -f ./database/docker-compose.yml up -d
 
+#Build database from ./database/build.sql
+build_db:
+	docker cp ./database/build.sql air-quality-db:/
+	docker exec -it air-quality-db psql -U myuser -d airqualitydb -f /build.sql
+
 #Run Django server on http://localhost:8000/
 run:
 	python3 ./Air_Quality/manage.py runserver &
@@ -35,6 +40,10 @@ run:
 #Stop database
 stop_db:
 	docker compose -f ./database/docker-compose.yml down
+
+#Clean database
+clean_db:
+	docker volume rm database_pgdata_volume
 
 stop_server:
 	pkill -f runserver
@@ -50,7 +59,7 @@ stop_streamlit:
 	pkill -f streamlit
 
 #Run application with one command:
-up: requirements migrations start_db run run_streamlit
+up: requirements migrations start_db build_db run run_streamlit
 
 #Virtualenv Make migrations
 migrations-venv:
