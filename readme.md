@@ -42,6 +42,14 @@ Celem projektu jest stworzenie systemu informatycznego do przechowywania, przetw
 
 ## Użytkowanie
 
+### Zmienne środowiskowe
+
+```
+POSTGRES_USER=myuser
+POSTGRES_PASSWORD=[password]
+POSTGRES_DB=airqualitydb
+```
+
 ### Uruchamianie aplikacji
 
 - Przejdź do głównego katalogu repozytorium (tam gdzie znajduje się Makefile).
