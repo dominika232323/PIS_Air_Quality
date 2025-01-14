@@ -107,6 +107,18 @@ def get_current_sensor_measurements(sensor_id: int) -> list[Measurement]:
         print(f"An error occured while trying to fetch sensor's measurements: {e}")
         return []
 
+def get_current_station_air_quality(station_id: int) -> str:
+    try:
+        data = fetch_data_from_api(f'https://api.gios.gov.pl/pjp-api/v1/rest/aqindex/getIndex/{station_id}')
+        quality_index = data['AqIndex']['Nazwa kategorii indeksu']
+        if quality_index:
+            return quality_index
+        else:
+            return "Unknown"
+    except requests.RequestException as e:
+        print(f"An error occured while trying to fetch sensor's measurements: {e}")
+        return []
+
 
 def get_archival_sensor_measurements(sensor_id: int, date_from: str, date_to: str) -> list[Measurement]:
     try:

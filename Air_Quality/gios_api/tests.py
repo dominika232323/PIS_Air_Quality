@@ -5,7 +5,8 @@ from gios_api.services import (map_station_json_to_object, get_all_stations,
                                get_station_sensors, map_sensor_json_to_object,
                                get_current_sensor_measurements, map_measurement_json_to_object,
                                get_archival_sensor_measurements, check_date_format,
-                               check_date_wide, get_last_n_days_sensor_measurements)
+                               check_date_wide, get_last_n_days_sensor_measurements,
+                               get_current_station_air_quality)
 import requests
 
 
@@ -125,6 +126,10 @@ def test_get_all_stations_request_exception(monkeypatch):
     result = get_all_stations()
     assert result == []
 
+def test_get_current_station_air_quality():
+    air_quality = get_current_station_air_quality(52)
+    assert type(air_quality) == str
+    assert air_quality in ("Unknown", "Bardzo dobry", "Dobry", "Umiarkowany", "Dostateczny", "Zły", "Bardzo zły")
 
 def test_get_all_sensors_request_exception(monkeypatch):
     def mock_get(*args, **kwargs):
