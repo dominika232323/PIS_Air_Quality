@@ -10,7 +10,7 @@ requirements:
 
 #Make migrations
 migrations:
-	python3 ./Air_Quality/manage.py migrate
+	python3 ./Air_Quality/manage.py makemigrations && python3 ./Air_Quality/manage.py migrate
 
 #Run all tests
 tests:
@@ -59,7 +59,7 @@ stop_streamlit:
 	pkill -f streamlit
 
 #Run application with one command:
-up: requirements migrations start_db build_db run run_streamlit
+up: requirements start_db migrations run run_streamlit
 
 #Virtualenv Make migrations
 migrations-venv:
