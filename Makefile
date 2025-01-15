@@ -59,7 +59,7 @@ stop_streamlit:
 	pkill -f streamlit
 
 #Run application with one command:
-up: requirements start_db migrations run run_streamlit
+up: requirements start_db migrations run_streamlit
 
 #Virtualenv Make migrations
 migrations-venv:
