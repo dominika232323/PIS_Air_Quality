@@ -1,10 +1,10 @@
-CREATE TABLE provinces
+CREATE TABLE IF NOT EXISTS provinces
 (
     id   SERIAL PRIMARY KEY,
     name VARCHAR(100) UNIQUE NOT NULL
 );
 
-CREATE TABLE districts
+CREATE TABLE IF NOT EXISTS districts
 (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(100) UNIQUE NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE districts
     FOREIGN KEY (province_id) REFERENCES provinces (id) ON DELETE CASCADE
 );
 
-CREATE TABLE communes
+CREATE TABLE IF NOT EXISTS communes
 (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(100) UNIQUE NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE communes
     FOREIGN KEY (district_id) REFERENCES districts (id) ON DELETE CASCADE
 );
 
-CREATE TABLE cities
+CREATE TABLE IF NOT EXISTS cities
 (
     id         SERIAL PRIMARY KEY,
     name       VARCHAR(100) UNIQUE NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE cities
     FOREIGN KEY (commune_id) REFERENCES communes (id) ON DELETE CASCADE
 );
 
-CREATE TABLE addresses
+CREATE TABLE IF NOT EXISTS addresses
 (
     id      SERIAL PRIMARY KEY,
     name    VARCHAR(255),
@@ -36,7 +36,7 @@ CREATE TABLE addresses
     FOREIGN KEY (city_id) REFERENCES cities (id) ON DELETE CASCADE
 );
 
-CREATE TABLE stations
+CREATE TABLE IF NOT EXISTS stations
 (
     id           SERIAL PRIMARY KEY,
     station_name VARCHAR(255)     NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE stations
     FOREIGN KEY (address_id) REFERENCES addresses (id) ON DELETE CASCADE
 );
 
-CREATE TABLE params
+CREATE TABLE IF NOT EXISTS params
 (
     id      SERIAL PRIMARY KEY,
     name    VARCHAR(255)       NOT NULL,
@@ -54,7 +54,7 @@ CREATE TABLE params
     code    VARCHAR(50) UNIQUE NOT NULL
 );
 
-CREATE TABLE sensors
+CREATE TABLE IF NOT EXISTS sensors
 (
     id         SERIAL PRIMARY KEY,
     station_id INT,
@@ -63,7 +63,7 @@ CREATE TABLE sensors
     FOREIGN KEY (param_id) REFERENCES params (id) ON DELETE CASCADE
 );
 
-CREATE TABLE measurements
+CREATE TABLE IF NOT EXISTS measurements
 (
     id         SERIAL PRIMARY KEY,
     date       TIMESTAMP        NOT NULL,
@@ -74,13 +74,13 @@ CREATE TABLE measurements
     FOREIGN KEY (sensor_id) REFERENCES sensors (id) ON DELETE CASCADE
 );
 
-CREATE TABLE air_quality_levels
+CREATE TABLE IF NOT EXISTS air_quality_levels
 (
     id         SERIAL PRIMARY KEY,
     level_name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE air_quality
+CREATE TABLE IF NOT EXISTS air_quality
 (
     id             SERIAL PRIMARY KEY,
     station_id     INT,
@@ -93,7 +93,7 @@ CREATE TABLE air_quality
     FOREIGN KEY (quality_level) REFERENCES air_quality_levels (id) ON DELETE CASCADE
 );
 
-CREATE TABLE air_quality_pollutants
+CREATE TABLE IF NOT EXISTS air_quality_pollutants
 (
     id             SERIAL PRIMARY KEY,
     air_quality_id INT NOT NULL,
@@ -106,11 +106,16 @@ CREATE TABLE air_quality_pollutants
     FOREIGN KEY (quality_level) REFERENCES air_quality_levels (id) ON DELETE CASCADE
 );
 
-INSERT INTO air_quality_levels (id, level_name)
-VALUES (-1, 'Brak indeksu'),
-       (0, 'Bardzo dobry'),
-       (1, 'Dobry'),
-       (2, 'Umiarkowany'),
-       (3, 'Dostateczny'),
-       (4, 'Zły'),
-       (5, 'Bardzo zły');
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM air_quality_levels LIMIT 1) THEN
+        INSERT INTO air_quality_levels (id, level_name)
+        VALUES (-1, 'Brak indeksu'),
+               (0, 'Bardzo dobry'),
+               (1, 'Dobry'),
+               (2, 'Umiarkowany'),
+               (3, 'Dostateczny'),
+               (4, 'Zły'),
+               (5, 'Bardzo zły');
+    END IF;
+END $$;
