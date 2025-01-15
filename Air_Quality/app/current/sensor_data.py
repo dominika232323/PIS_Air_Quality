@@ -39,6 +39,9 @@ else:
     gb_sensors = GridOptionsBuilder.from_dataframe(results_df)
     gb_sensors.configure_selection("single")
     gb_sensors.configure_auto_height(autoHeight=True)
+
+    gb_sensors.configure_columns(["ID Sensora"], hide=True)
+
     grid_options_sensors = gb_sensors.build()
     grid_response_sensors = AgGrid(
         results_df,

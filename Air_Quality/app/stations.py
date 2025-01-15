@@ -10,18 +10,18 @@ stations = get_all_stations()
 stations_data = [
     {
         "ID": station.id,
-        "Nazwa Stacji": station.name,
+        "Ulica": station.location.street or "Brak danych",
+        "Miasto": station.location.city,
         "Województwo": station.location.voivodeship,
         "Powiat": station.location.district,
         "Gmina": station.location.commune,
-        "Miasto": station.location.city,
-        "Ulica": station.location.street or "Brak danych"
+        "Nazwa Stacji": station.name,
     }
     for station in stations
 ]
 stations_df = pd.DataFrame(stations_data)
 
-st.write("### Filtruj")
+st.write("### Wszystkie stacje")
 search_query = st.text_input("Wyszukaj w stacjach:")
 filtered_df = stations_df.copy()
 if search_query:
@@ -32,7 +32,12 @@ if search_query:
 gb = GridOptionsBuilder.from_dataframe(filtered_df)
 gb.configure_pagination(paginationAutoPageSize=True)
 gb.configure_selection("single")
-gb.configure_column("Ulica", minWidth=275)
+for col in filtered_df.columns:
+    gb.configure_column(col, autoWidth=True)
+
+
+gb.configure_columns(["ID", "Nazwa Stacji"], hide=True)
+
 grid_options = gb.build()
 grid_response = AgGrid(
     filtered_df,
