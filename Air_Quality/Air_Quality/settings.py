@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'gios_api'
+    'rest_framework',
+    'gios_api',
 ]
 
 MIDDLEWARE = [
