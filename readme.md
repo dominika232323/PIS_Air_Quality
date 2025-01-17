@@ -44,10 +44,13 @@ Celem projektu jest stworzenie systemu informatycznego do przechowywania, przetw
 
 ### Zmienne środowiskowe
 
+Przykładowy plik `.env` w katalogu głównym projektu:
+
 ```
 POSTGRES_USER=myuser
 POSTGRES_PASSWORD=[password]
 POSTGRES_DB=airqualitydb
+DJANGO_DEBUG=1
 ```
 
 ### Uruchamianie aplikacji
