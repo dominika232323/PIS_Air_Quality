@@ -103,11 +103,11 @@ class Sensor(models.Model):
 class Measurement(models.Model):
     date = models.DateField()
     value = models.FloatField()
-    param_code = models.ForeignKey(Parameter, null=True, on_delete=models.SET_NULL)
+    parameter = models.ForeignKey(Parameter, null=True, on_delete=models.SET_NULL)
     sensor = models.ForeignKey(Sensor, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"{self.value} for {self.param_code.name} on {self.date}"
+        return f"{self.value} for {self.parameter.name} on {self.date}"
 
     class Meta:
         managed = False
@@ -128,13 +128,13 @@ class AirQualityLevel(models.Model):
 class AirQuality(models.Model):
     station = models.ForeignKey(Station, null=True, on_delete=models.SET_NULL)
     calculate_date = models.DateField()
-    quality_level = models.ForeignKey(AirQualityLevel, null=True, on_delete=models.SET_NULL)
+    air_quality_level = models.ForeignKey(AirQualityLevel, null=True, on_delete=models.SET_NULL)
     source_date = models.DateField()
     index_status = models.BooleanField()
     critical_param = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"{self.quality_level.level_name} at {self.station} on {self.calculate_date}: "
+        return f"{self.air_quality_level.level_name} at {self.station} on {self.calculate_date}: "
 
     class Meta:
         managed = False
@@ -145,7 +145,7 @@ class AirQualityPollutant(models.Model):
     air_quality = models.ForeignKey(AirQuality, null=True, on_delete=models.SET_NULL)
     parameter = models.ForeignKey(Parameter ,null=True, on_delete=models.SET_NULL)
     calculate_date = models.DateField()
-    quality_level = models.ForeignKey(AirQualityLevel ,null=True, on_delete=models.SET_NULL)
+    air_quality_level = models.ForeignKey(AirQualityLevel ,null=True, on_delete=models.SET_NULL)
     source_date = models.DateField()
 
     def __str__(self):

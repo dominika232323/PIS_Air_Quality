@@ -56,21 +56,21 @@ CREATE TABLE IF NOT EXISTS params
 
 CREATE TABLE IF NOT EXISTS sensors
 (
-    id         SERIAL PRIMARY KEY,
-    station_id INT,
-    param_id   INT,
-    FOREIGN KEY (station_id) REFERENCES stations (id) ON DELETE CASCADE,
-    FOREIGN KEY (param_id) REFERENCES params (id) ON DELETE CASCADE
+    id           SERIAL PRIMARY KEY,
+    station_id   INT,
+    parameter_id INT,
+    FOREIGN KEY  (station_id) REFERENCES stations (id) ON DELETE CASCADE,
+    FOREIGN KEY  (parameter_id) REFERENCES params (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS measurements
 (
-    id         SERIAL PRIMARY KEY,
-    date       TIMESTAMP        NOT NULL,
-    value      DOUBLE PRECISION NOT NULL,
-    param_code VARCHAR(50)      NOT NULL,
-    sensor_id  INT,
-    FOREIGN KEY (param_code) REFERENCES params (code) ON DELETE CASCADE,
+    id           SERIAL PRIMARY KEY,
+    date         TIMESTAMP        NOT NULL,
+    value        DOUBLE PRECISION NOT NULL,
+    parameter_id INT,
+    sensor_id    INT,
+    FOREIGN KEY (parameter_id) REFERENCES params (id) ON DELETE CASCADE,
     FOREIGN KEY (sensor_id) REFERENCES sensors (id) ON DELETE CASCADE
 );
 
@@ -82,28 +82,28 @@ CREATE TABLE IF NOT EXISTS air_quality_levels
 
 CREATE TABLE IF NOT EXISTS air_quality
 (
-    id             SERIAL PRIMARY KEY,
-    station_id     INT,
-    calculate_date TIMESTAMP,
-    quality_level  INT,
-    source_date    TIMESTAMP,
-    index_status   BOOLEAN,
-    critical_param VARCHAR(50),
+    id                    SERIAL PRIMARY KEY,
+    station_id            INT,
+    calculate_date        TIMESTAMP,
+    air_quality_level_id  INT,
+    source_date           TIMESTAMP,
+    index_status          BOOLEAN,
+    critical_param        VARCHAR(50),
     FOREIGN KEY (station_id) REFERENCES stations (id) ON DELETE CASCADE,
-    FOREIGN KEY (quality_level) REFERENCES air_quality_levels (id) ON DELETE CASCADE
+    FOREIGN KEY (air_quality_level_id) REFERENCES air_quality_levels (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS air_quality_pollutants
 (
-    id             SERIAL PRIMARY KEY,
-    air_quality_id INT NOT NULL,
-    param_id       INT NOT NULL,
-    calculate_date TIMESTAMP,
-    quality_level  INT,
-    source_date    TIMESTAMP,
+    id                   SERIAL PRIMARY KEY,
+    air_quality_id       INT NOT NULL,
+    parameter_id         INT NOT NULL,
+    calculate_date       TIMESTAMP,
+    air_quality_level_id INT,
+    source_date          TIMESTAMP,
     FOREIGN KEY (air_quality_id) REFERENCES air_quality (id) ON DELETE CASCADE,
-    FOREIGN KEY (param_id) REFERENCES params (id) ON DELETE CASCADE,
-    FOREIGN KEY (quality_level) REFERENCES air_quality_levels (id) ON DELETE CASCADE
+    FOREIGN KEY (parameter_id) REFERENCES params (id) ON DELETE CASCADE,
+    FOREIGN KEY (air_quality_level_id) REFERENCES air_quality_levels (id) ON DELETE CASCADE
 );
 
 DO $$
