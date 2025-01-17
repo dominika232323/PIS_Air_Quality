@@ -1,13 +1,13 @@
 CREATE TABLE IF NOT EXISTS provinces
 (
     id   SERIAL PRIMARY KEY,
-    name VARCHAR(100) UNIQUE NOT NULL
+    name VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS districts
 (
     id          SERIAL PRIMARY KEY,
-    name        VARCHAR(100) UNIQUE NOT NULL,
+    name        VARCHAR(100) NOT NULL,
     province_id INT                 NOT NULL,
     FOREIGN KEY (province_id) REFERENCES provinces (id) ON DELETE CASCADE
 );
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS districts
 CREATE TABLE IF NOT EXISTS communes
 (
     id          SERIAL PRIMARY KEY,
-    name        VARCHAR(100) UNIQUE NOT NULL,
+    name        VARCHAR(100) NOT NULL,
     district_id INT                 NOT NULL,
     FOREIGN KEY (district_id) REFERENCES districts (id) ON DELETE CASCADE
 );
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS communes
 CREATE TABLE IF NOT EXISTS cities
 (
     id         SERIAL PRIMARY KEY,
-    name       VARCHAR(100) UNIQUE NOT NULL,
+    name       VARCHAR(100) NOT NULL,
     commune_id INT                 NOT NULL,
     FOREIGN KEY (commune_id) REFERENCES communes (id) ON DELETE CASCADE
 );
