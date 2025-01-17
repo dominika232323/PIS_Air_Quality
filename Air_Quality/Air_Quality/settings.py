@@ -9,8 +9,14 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+
+# Load environment variables from .env file
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,8 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-x(y!lp^+7gqc=11cdyfs1#3zsz2t82(r-rb6b^f7g+#2j^c%h4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = False
+DEBUG = True if os.getenv("DJANGO_DEBUG", "0") == "1" else False
 
 ALLOWED_HOSTS = ['*']
 
@@ -38,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'gios_api'
+    'rest_framework',
+    'gios_api',
 ]
 
 MIDDLEWARE = [
@@ -78,9 +84,9 @@ WSGI_APPLICATION = 'Air_Quality.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'air_quality_db',
-        'USER': 'admin',
-        'PASSWORD': 'admin',
+        "NAME": os.getenv("POSTGRES_DB"),
+        "USER": os.getenv("POSTGRES_USER"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
         'HOST': 'localhost',
         'PORT': '5432',
     }
