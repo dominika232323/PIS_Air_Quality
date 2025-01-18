@@ -12,6 +12,10 @@ requirements:
 migrations:
 	python3 ./Air_Quality/manage.py makemigrations && python3 ./Air_Quality/manage.py migrate
 
+#Virtualenv Make migrations
+migrations-venv:
+	../venv/bin/python3 ./Air_Quality/manage.py makemigrations  && ../venv/bin/python3 ./Air_Quality/manage.py migrate
+
 #Run all tests
 tests:
 	pytest ./Air_Quality
@@ -60,10 +64,6 @@ stop_streamlit:
 
 #Run application with one command:
 up: requirements start_db migrations run_streamlit
-
-#Virtualenv Make migrations
-migrations-venv:
-	../venv/bin/python3 ./Air_Quality/manage.py migrate
 
 #Vitrualenv Run Django server on http://localhost:8000/
 run-venv:
