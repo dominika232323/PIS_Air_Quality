@@ -34,7 +34,7 @@ build_db:
 	docker exec -it air-quality-db psql -U myuser -d airqualitydb -f /build.sql
 
 update_db:
-	python3 ./Air_Quality/gios_api/db_operations.py
+	python3 ./Air_Quality/manage.py update_db
 
 #Run Django server on http://localhost:8000/
 run:
@@ -62,7 +62,7 @@ stop_streamlit:
 	pkill -f streamlit
 
 #Run application with one command:
-up: requirements start_db migrations run
+up: requirements start_db migrations update_db run
 
 #Virtualenv Make migrations
 migrations-venv:

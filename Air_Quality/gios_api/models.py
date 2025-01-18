@@ -50,7 +50,7 @@ class City(models.Model):
 
 
 class Address(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, null=True)
     city = models.ForeignKey(City, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
@@ -63,8 +63,6 @@ class Address(models.Model):
 
 class Station(models.Model):
     station_name = models.CharField(max_length=255)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
     address = models.ForeignKey(Address, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
