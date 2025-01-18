@@ -43,7 +43,7 @@ run:
 
 #Stop database
 stop_db:
-	docker compose -f ./database/docker-compose.yml down
+	docker compose -f ./database/docker-compose.yml down --remove-orphans
 
 #Clean database
 clean_db:
