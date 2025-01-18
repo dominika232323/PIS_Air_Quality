@@ -22,7 +22,7 @@
 
     - name: Install libpq-dev
       apt:
-        name: libpd-dev
+        name: libpq-dev
         state: present
       become: yes
 
