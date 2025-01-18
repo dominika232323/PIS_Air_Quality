@@ -10,6 +10,7 @@ requirements:
 
 #Make migrations
 migrations:
+	sleep 3
 	python3 ./Air_Quality/manage.py makemigrations && python3 ./Air_Quality/manage.py migrate
 
 #Run all tests

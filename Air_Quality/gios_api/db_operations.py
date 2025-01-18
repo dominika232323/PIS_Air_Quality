@@ -22,11 +22,16 @@ def save_station_data_to_db(stations: list[StationData]):
             defaults={'commune': commune}
         )
 
-        address, _ = Address.objects.update_or_create(
-            name=station_data.location.street or 'Unknown Street',
-            defaults={'city': city}
-        )
-
+        if station_data.location.street:
+            address, _ = Address.objects.update_or_create(
+                name=station_data.location.street,
+                city=city
+            )
+        else:
+            address, _ = Address.objects.update_or_create(
+                name=f"Station {station_data.name}",
+                city=city
+            )
 
         station, _ = Station.objects.update_or_create(
             station_name=station_data.name,
