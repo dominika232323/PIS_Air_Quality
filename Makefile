@@ -65,20 +65,12 @@ stop_streamlit:
 #Run application with one command:
 up: requirements start_db migrations run_streamlit
 
-#Vitrualenv Run Django server on http://localhost:8000/
-run-venv:
-	nohup ../venv/bin/python3 ./Air_Quality/manage.py runserver &
+#Run application with one command on az vm:
+up-az: start_db migrations-venv run-az runstreamlit-az
 
 #Vitrualenv Run Django server on az vm
 run-az:
 	nohup ../venv/bin/python3 ./Air_Quality/manage.py runserver 0:8000 &
-
-
-#Run application with one command in virtualenv:
-up-venv: migrations-venv start_db run-venv
-
-#Run application with one command on az vm:
-up-az: migrations-venv start_db run-az runstreamlit-az
 
 #Stop application:
 down: stop_db stop_server stop_streamlit

@@ -80,10 +80,10 @@
       shell:
         ./venv/bin/pip3 install -r /home/{{ ansible_user }}/PIS-proj/requirements.txt
 
-    # - name: run app
-    #   make:
-    #     chdir: /home/{{ ansible_user }}/PIS-proj/
-    #     target: up-venv
+    - name: clear previous processes and migrations
+      make:
+        chdir: /home/{{ ansible_user }}/PIS-proj/
+        target: down
 
     - name: make migrations
       make:
@@ -100,7 +100,12 @@
         chdir: /home/{{ ansible_user }}/PIS-proj/
         target: run-az
 
+
     - name: start streamlit in background
-      shell: nohup ../venv/bin/python3 -m streamlit run ./Air_Quality/app/app.py --server.address 0.0.0.0 --server.port 8501 &
-      args:
+      make:
         chdir: /home/{{ ansible_user }}/PIS-proj/
+        target: runstreamlit-az
+    # - name: start streamlit in background
+    #   shell: nohup ../venv/bin/python3 -m streamlit run ./Air_Quality/app/app.py --server.address 0.0.0.0 --server.port 8501 &
+    #   args:
+    #     chdir: /home/{{ ansible_user }}/PIS-proj/
