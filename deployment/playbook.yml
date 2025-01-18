@@ -84,6 +84,7 @@
       make:
         chdir: /home/{{ ansible_user }}/PIS-proj/
         target: down
+      ignore_errors: true
 
     - name: make migrations
       make:
