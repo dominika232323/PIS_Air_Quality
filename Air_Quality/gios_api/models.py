@@ -9,7 +9,7 @@ class Province(models.Model):
         return self.name
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "provinces"
 
 
@@ -21,7 +21,7 @@ class District(models.Model):
         return f"{self.name} in {self.province.name}"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "districts"
 
 
@@ -33,7 +33,7 @@ class Commune(models.Model):
         return f"{self.name} in {self.district.name}"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "communes"
 
 
@@ -45,7 +45,7 @@ class City(models.Model):
         return f"{self.name} in {self.commune.name}"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "cities"
 
 
@@ -57,7 +57,7 @@ class Address(models.Model):
         return f"{self.name} in {self.city.name}"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "addresses"
 
 
@@ -71,7 +71,7 @@ class Station(models.Model):
         return f"{self.station_name} at ({self.latitude}, {self.longitude}) in {self.address.name}"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "stations"
 
 
@@ -84,7 +84,7 @@ class Parameter(models.Model):
         return f"{self.name} (Formula: {self.formula}, Code: {self.code})"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "params"
 
 
@@ -96,7 +96,7 @@ class Sensor(models.Model):
         return f"Sensor at {self.station.station_name} measuring {self.parameter.name}"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "sensors"
 
 
@@ -110,7 +110,7 @@ class Measurement(models.Model):
         return f"{self.value} for {self.parameter.name} on {self.date}"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "measurements"
 
 
@@ -121,7 +121,7 @@ class AirQualityLevel(models.Model):
         return f"{self.level_name}"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "air_quality_levels"
 
 
@@ -137,7 +137,7 @@ class AirQuality(models.Model):
         return f"{self.air_quality_level.level_name} at {self.station} on {self.calculate_date}: "
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "air_quality"
 
 
@@ -152,5 +152,5 @@ class AirQualityPollutant(models.Model):
         return f"{self.parameter} for {self.air_quality.station.station_name} at {self.calculate_date} "
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "air_quality_pollutants"
