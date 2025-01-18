@@ -85,16 +85,18 @@
         chdir: /home/{{ ansible_user }}/PIS-proj/
         target: down
       ignore_errors: true
-
-    - name: make migrations
-      make:
-        chdir: /home/{{ ansible_user }}/PIS-proj/
-        target: migrations-venv
+      become: yes
 
     - name: start db
       make:
         chdir: /home/{{ ansible_user }}/PIS-proj/
         target: start_db
+      become: yes
+
+    - name: make migrations
+      make:
+        chdir: /home/{{ ansible_user }}/PIS-proj/
+        target: migrations-venv
 
     - name: start application in background
       make:
