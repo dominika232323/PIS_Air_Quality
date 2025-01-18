@@ -1,5 +1,5 @@
 from gios_api.services import get_all_stations, StationData
-from gios_api.models import Province, District, Commune, City, Address
+from gios_api.models import Province, District, Commune, City, Address, Station
 
 def save_station_data_to_db(stations: list[StationData]):
     for station_data in stations:
@@ -23,8 +23,14 @@ def save_station_data_to_db(stations: list[StationData]):
         )
 
         address, _ = Address.objects.update_or_create(
-            name=station_data.location.street,
+            name=station_data.location.street or 'Unknown Street',
             defaults={'city': city}
+        )
+
+
+        station, _ = Station.objects.update_or_create(
+            station_name=station_data.name,
+            defaults={'address': address}
         )
 
 

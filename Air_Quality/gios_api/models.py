@@ -50,7 +50,7 @@ class City(models.Model):
 
 
 class Address(models.Model):
-    name = models.CharField(max_length=255, null=True)
+    name = models.CharField(max_length=255)
     city = models.ForeignKey(City, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
@@ -58,6 +58,7 @@ class Address(models.Model):
 
     class Meta:
         managed = True
+        unique_together = ('name', 'city')
         db_table = "addresses"
 
 
