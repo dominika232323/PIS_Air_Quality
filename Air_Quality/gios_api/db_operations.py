@@ -34,8 +34,11 @@ def save_stations_data_to_db(stations: list[StationData]):
             )
 
         station, _ = Station.objects.update_or_create(
-            station_name=station_data.name,
-            defaults={'address': address}
+            external_station_id=station_data.id,
+            defaults={
+                'station_name': station_data.name,
+                'address': address
+                }
         )
 
 
@@ -52,9 +55,10 @@ def save_station_sensors_to_db(station_in_db: Station, station_sensors: list[Sen
             name=sensor.indicator
         )
         Sensor.objects.update_or_create(
-            station=station_in_db,
             external_sensor_id = sensor.id,
-            defaults={'parameter': parameter}
+            defaults={'parameter': parameter,
+                      'station': station_in_db
+                    }
         )
 
 

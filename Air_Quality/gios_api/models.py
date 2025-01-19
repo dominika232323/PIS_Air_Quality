@@ -64,6 +64,7 @@ class Address(models.Model):
 
 class Station(models.Model):
     station_name = models.CharField(max_length=255)
+    external_station_id = models.CharField(max_length=255, null=True, unique=True)
     address = models.ForeignKey(Address, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
