@@ -76,8 +76,6 @@ class Station(models.Model):
 
 class Parameter(models.Model):
     name = models.CharField(max_length=255)
-    formula = models.CharField(max_length=50)
-    code = models.CharField(max_length=50)
 
     def __str__(self):
         return f"{self.name} (Formula: {self.formula}, Code: {self.code})"
@@ -89,6 +87,7 @@ class Parameter(models.Model):
 
 class Sensor(models.Model):
     station = models.ForeignKey(Station, null=True, on_delete=models.SET_NULL)
+    external_sensor_id = models.CharField(max_length=255, null=True, unique=True)
     parameter = models.ForeignKey(Parameter, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
@@ -100,7 +99,7 @@ class Sensor(models.Model):
 
 
 class Measurement(models.Model):
-    date = models.DateField()
+    date = models.DateTimeField()
     value = models.FloatField()
     parameter = models.ForeignKey(Parameter, null=True, on_delete=models.SET_NULL)
     sensor = models.ForeignKey(Sensor, null=True, on_delete=models.SET_NULL)
@@ -126,9 +125,9 @@ class AirQualityLevel(models.Model):
 
 class AirQuality(models.Model):
     station = models.ForeignKey(Station, null=True, on_delete=models.SET_NULL)
-    calculate_date = models.DateField()
+    calculate_date = models.DateTimeField()
     air_quality_level = models.ForeignKey(AirQualityLevel, null=True, on_delete=models.SET_NULL)
-    source_date = models.DateField()
+    source_date = models.DateTimeField()
     index_status = models.BooleanField()
     critical_param = models.CharField(max_length=50)
 
@@ -143,9 +142,9 @@ class AirQuality(models.Model):
 class AirQualityPollutant(models.Model):
     air_quality = models.ForeignKey(AirQuality, null=True, on_delete=models.SET_NULL)
     parameter = models.ForeignKey(Parameter ,null=True, on_delete=models.SET_NULL)
-    calculate_date = models.DateField()
+    calculate_date = models.DateTimeField()
     air_quality_level = models.ForeignKey(AirQualityLevel ,null=True, on_delete=models.SET_NULL)
-    source_date = models.DateField()
+    source_date = models.DateTimeField()
 
     def __str__(self):
         return f"{self.parameter} for {self.air_quality.station.station_name} at {self.calculate_date} "
