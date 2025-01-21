@@ -1,14 +1,17 @@
 import pytest
-from gios_api.models import Sensor, Parameter, Measurement
-from datetime import date, timedelta
-from gios_api.services import check_db_for_measurements_in_period
+from gios_api.models import Sensor, Parameter, Measurement, Station, Address, City, Commune, District, Province
+from datetime import date, timedelta, datetime
+from gios_api.db_services import check_db_for_measurements_in_period
 
 
 @pytest.fixture()
-def test_populate_sensor_readings(db):
+def populate_sensor_readings(db):
+    # cit = City.objects.create(name = "city")
+    # addr = Address.objects.create(name = "address", city = cit)
+    stat = Station.objects.create(station_name = "station", external_station_id= "001", address = None)
     sensor_param = Parameter.objects.create(name = "test param")
     sensor_created = Sensor.objects.create(
-        station = None,
+        station = stat,
         external_sensor_id = "001",
         parameter = sensor_param
     )
@@ -17,18 +20,17 @@ def test_populate_sensor_readings(db):
         Measurement.objects.create(
             sensor=sensor_created,
             date=mes[0],
-            defaults= {
-                'value': mes[1],
-                'parameter': sensor_param,
-            }
+            value=  mes[1],
+            parameter =  sensor_param
         )
     assert len(Measurement.objects.all()) == 30
 
 # @pytest.mark.django_db
-def test_get_data_week(db):
+def test_get_data_week(populate_sensor_readings):
     # populate_sensor_readings()
-    measurements_list = check_db_for_measurements_in_period("001", date.today().strftime('%Y-%m-%d %H:%M'), (date.today() - timedelta(days = 7)).strftime('%Y-%m-%d %H:%M'))
+    measurements_list = check_db_for_measurements_in_period("001", (date.today() - timedelta(days = 6)).strftime('%Y-%m-%d %H:%M'), date.today().strftime('%Y-%m-%d %H:%M'))
     assert len(measurements_list) == 7
-    for mes, i in enumerate(measurements_list):
-        assert mes.value == i
-        assert mes.date == date.today() - timedelta(days = 7)
+    for i, mes in enumerate(measurements_list):
+        assert mes.value == len(measurements_list) - (i+1)
+        test_date = date.today() - timedelta(days = (len(measurements_list) -1-i))
+        assert mes.date.date() == test_date
