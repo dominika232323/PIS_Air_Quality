@@ -124,7 +124,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+# .env
 .venv
 env/
 venv/
@@ -167,3 +167,6 @@ cython_debug/
 # terraform
 .terraform*
 *.tfstate
+
+# Django migrations
+Air_Quality/gios_api/migrations/

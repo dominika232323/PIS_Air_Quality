@@ -22,10 +22,9 @@ Celem projektu jest stworzenie systemu informatycznego do przechowywania, przetw
 - Wyświetlanie wykresu historii wartości parametrów na wybranej stacji w formie wykresu z róznymi przedziałami czasowymi (dla ostatniego dnia, tygodnia, miesiąca, roku i całej historii) i oznaczonymi wartościami najmniejszymi, największymi i przekraczającymi normy
 
 ### 5. Agregacja danych
-- Wyświetlanie średnich wartości parametrów dla różnych poziomów administracyjnych:
+- Wyświetlanie zagregowanych wartości parametrów dla różnych poziomów administracyjnych:
   - dla ostatniego pomiaru,
   - dla wybranego przedziału czasowego.
-- Wyświetlanie zagregowanych granicznych wartosci parametrów dla różnych poziomów administracyjnych i przedziaów czasowych.
 
 ### 6. Monitorowanie norm jakości powietrza
 - Wyświetlanie aktualnych ostrzeżeń o przekroczonych normach jakości powietrza.
@@ -42,6 +41,17 @@ Celem projektu jest stworzenie systemu informatycznego do przechowywania, przetw
 ---
 
 ## Użytkowanie
+
+### Zmienne środowiskowe
+
+Przykładowy plik `.env` w katalogu głównym projektu:
+
+```
+POSTGRES_USER=myuser
+POSTGRES_PASSWORD=[password]
+POSTGRES_DB=airqualitydb
+DJANGO_DEBUG=1
+```
 
 ### Uruchamianie aplikacji
 
@@ -60,7 +70,9 @@ Celem projektu jest stworzenie systemu informatycznego do przechowywania, przetw
 ### Lista pozostałych poleceń
 - `make migrations` - stosuje migracje (po dodaniu/ zmienieniu modelu)
 - `make start_db` - uruchamia kontener z bazą danych
+- `make build_db` - wykonuje skrypt *./database/build.sql*
 - `make stop_db` - zatrzymuje kontener z bazą danych
+- `make clean_db` - usuwa Docker Volume database_pgdata_volume
 - `make run` - uruchamia serwer Django
 
 ---
@@ -90,7 +102,7 @@ Celem projektu jest stworzenie systemu informatycznego do przechowywania, przetw
 - **Jira**: system zarządzania zadaniami.
 - **GitHub**: repozytorium kodu.
 - **Pytest**: framework do testowania.
-- **Jenkins**: automatyczne budowanie, testowanie i wdrażanie aplikacji.
-- **Nexus**: repozytorium artefaktów.
+- **Jenkins**: automatyczne budowanie i testowanie.
+- **Azure**: wdrażanie aplikacji.
 
 ---
