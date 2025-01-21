@@ -20,6 +20,12 @@
         state: present
       become: yes
 
+    - name: Install libpq-dev
+      apt:
+        name: libpq-dev
+        state: present
+      become: yes
+
     - name: remove old repo
       shell:
           rm -rf /home/{{ ansible_user }}/PIS-proj
@@ -73,20 +79,23 @@
       shell:
         ./venv/bin/pip3 install -r /home/{{ ansible_user }}/PIS-proj/requirements.txt
 
-    # - name: run app
-    #   make:
-    #     chdir: /home/{{ ansible_user }}/PIS-proj/
-    #     target: up-venv
-
-    - name: make migrations
+    - name: clear previous processes and migrations
       make:
         chdir: /home/{{ ansible_user }}/PIS-proj/
-        target: migrations-venv
+        target: down
+      ignore_errors: true
+      become: yes
 
     - name: start db
       make:
         chdir: /home/{{ ansible_user }}/PIS-proj/
         target: start_db
+      become: yes
+
+    - name: make migrations
+      make:
+        chdir: /home/{{ ansible_user }}/PIS-proj/
+        target: migrations-venv
 
     - name: start application in background
       make:
