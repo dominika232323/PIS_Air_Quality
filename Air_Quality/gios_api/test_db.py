@@ -1,5 +1,5 @@
 import pytest
-from gios_api.models import Province, District, Commune, City, Address, Station, Sensor, Parameter, Measurement
+from gios_api.models import Sensor, Parameter, Measurement
 from datetime import date, timedelta
 from gios_api.services import check_db_for_measurements_in_period
 # import pytest-django
