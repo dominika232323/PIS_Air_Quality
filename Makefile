@@ -14,12 +14,18 @@ migrations:
 	python3 ./Air_Quality/manage.py makemigrations && python3 ./Air_Quality/manage.py migrate
 
 #Run all tests
-tests:
+tests_withDB:
 	pytest ./Air_Quality
+
+DB_tests: start_db tests_withDB
+
+#Run tests not requiring db
+tests:
+	pytest ./Air_Quality/gios_api/tests.py
 
 #Run tests with coverage
 coverage:
-	pytest ./Air_Quality --cov=. --cov-report=html $(COV_FAIL)
+	pytest ./Air_Quality/gios_api/tests.py --cov=. --cov-report=html $(COV_FAIL)
 
 #Clean up coverage artifacts
 clean:
