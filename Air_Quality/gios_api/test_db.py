@@ -2,7 +2,6 @@ import pytest
 from gios_api.models import Sensor, Parameter, Measurement
 from datetime import date, timedelta
 from gios_api.services import check_db_for_measurements_in_period
-# import pytest-django
 
 def populate_sensor_readings():
     sensor_param = Parameter.objects.create(name = "test param")
