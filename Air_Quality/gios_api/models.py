@@ -9,7 +9,7 @@ class Province(models.Model):
         return self.name
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "provinces"
 
 
@@ -21,7 +21,7 @@ class District(models.Model):
         return f"{self.name} in {self.province.name}"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "districts"
 
 
@@ -33,7 +33,7 @@ class Commune(models.Model):
         return f"{self.name} in {self.district.name}"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "communes"
 
 
@@ -45,7 +45,7 @@ class City(models.Model):
         return f"{self.name} in {self.commune.name}"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "cities"
 
 
@@ -57,51 +57,50 @@ class Address(models.Model):
         return f"{self.name} in {self.city.name}"
 
     class Meta:
-        managed = False
+        managed = True
+        unique_together = ('name', 'city')
         db_table = "addresses"
 
 
 class Station(models.Model):
     station_name = models.CharField(max_length=255)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    external_station_id = models.CharField(max_length=255, null=True, unique=True)
     address = models.ForeignKey(Address, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f"{self.station_name} at ({self.latitude}, {self.longitude}) in {self.address.name}"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "stations"
 
 
 class Parameter(models.Model):
     name = models.CharField(max_length=255)
-    formula = models.CharField(max_length=50)
-    code = models.CharField(max_length=50)
 
     def __str__(self):
         return f"{self.name} (Formula: {self.formula}, Code: {self.code})"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "params"
 
 
 class Sensor(models.Model):
     station = models.ForeignKey(Station, null=True, on_delete=models.SET_NULL)
+    external_sensor_id = models.CharField(max_length=255, null=True, unique=True)
     parameter = models.ForeignKey(Parameter, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f"Sensor at {self.station.station_name} measuring {self.parameter.name}"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "sensors"
 
 
 class Measurement(models.Model):
-    date = models.DateField()
+    date = models.DateTimeField()
     value = models.FloatField()
     parameter = models.ForeignKey(Parameter, null=True, on_delete=models.SET_NULL)
     sensor = models.ForeignKey(Sensor, null=True, on_delete=models.SET_NULL)
@@ -110,7 +109,7 @@ class Measurement(models.Model):
         return f"{self.value} for {self.parameter.name} on {self.date}"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "measurements"
 
 
@@ -121,15 +120,15 @@ class AirQualityLevel(models.Model):
         return f"{self.level_name}"
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "air_quality_levels"
 
 
 class AirQuality(models.Model):
     station = models.ForeignKey(Station, null=True, on_delete=models.SET_NULL)
-    calculate_date = models.DateField()
+    calculate_date = models.DateTimeField()
     air_quality_level = models.ForeignKey(AirQualityLevel, null=True, on_delete=models.SET_NULL)
-    source_date = models.DateField()
+    source_date = models.DateTimeField()
     index_status = models.BooleanField()
     critical_param = models.CharField(max_length=50)
 
@@ -137,20 +136,20 @@ class AirQuality(models.Model):
         return f"{self.air_quality_level.level_name} at {self.station} on {self.calculate_date}: "
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "air_quality"
 
 
 class AirQualityPollutant(models.Model):
     air_quality = models.ForeignKey(AirQuality, null=True, on_delete=models.SET_NULL)
     parameter = models.ForeignKey(Parameter ,null=True, on_delete=models.SET_NULL)
-    calculate_date = models.DateField()
+    calculate_date = models.DateTimeField()
     air_quality_level = models.ForeignKey(AirQualityLevel ,null=True, on_delete=models.SET_NULL)
-    source_date = models.DateField()
+    source_date = models.DateTimeField()
 
     def __str__(self):
         return f"{self.parameter} for {self.air_quality.station.station_name} at {self.calculate_date} "
 
     class Meta:
-        managed = False
+        managed = True
         db_table = "air_quality_pollutants"

@@ -10,6 +10,7 @@ requirements:
 
 #Make migrations
 migrations:
+	sleep 3
 	python3 ./Air_Quality/manage.py makemigrations && python3 ./Air_Quality/manage.py migrate
 
 #Virtualenv Make migrations
@@ -37,13 +38,16 @@ build_db:
 	docker cp ./database/build.sql air-quality-db:/
 	docker exec -it air-quality-db psql -U myuser -d airqualitydb -f /build.sql
 
+update_db:
+	python3 ./Air_Quality/manage.py update_db
+
 #Run Django server on http://localhost:8000/
 run:
 	python3 ./Air_Quality/manage.py runserver &
 
 #Stop database
 stop_db:
-	docker compose -f ./database/docker-compose.yml down --remove-orphans
+	docker compose -f ./database/docker-compose.yml down -v --remove-orphans
 
 #Clean database
 clean_db:
@@ -63,7 +67,7 @@ stop_streamlit:
 	pkill -f streamlit
 
 #Run application with one command:
-up: requirements start_db migrations run_streamlit
+up: requirements start_db migrations update_db run
 
 #Run application with one command on az vm:
 up-az: start_db migrations-venv run-az runstreamlit-az

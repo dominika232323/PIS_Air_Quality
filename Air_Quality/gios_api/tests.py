@@ -37,6 +37,29 @@ def test_map_station_json_into_object():
     assert station_data.location.voivodeship == 'DOLNOŚLĄSKIE'
     assert station_data.location.street == 'ul. Bartnicza'
 
+
+
+def test_map_station_json_into_street_null():
+    station_json ={
+    "id": 612,
+    "stationName": "Borsukowizna, Szkółka Leśna",
+    "gegrLat": "53.215492",
+    "gegrLon": "23.642153",
+    "city": {
+      "id": 63,
+      "name": "Borsukowizna",
+      "commune": {
+        "communeName": "Krynki",
+        "districtName": "sokólski",
+        "provinceName": "PODLASKIE"
+      }
+    },
+    "addressStreet": 'null'
+  }
+
+    station_data = map_station_json_to_object(station_json)
+    assert station_data.location.city == 'Borsukowizna'
+
 def test_map_sensor_json_into_object():
     sensor_json = {
       "Identyfikator stanowiska": 464,
