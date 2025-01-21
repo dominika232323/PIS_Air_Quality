@@ -30,7 +30,7 @@ def populate_sensor_readings(db):
         )
     assert len(Measurement.objects.all()) == 30
 
-# @pytest.mark.django_db
+@pytest.mark.django_db
 def test_get_data_week(populate_sensor_readings):
     # populate_sensor_readings()
     measurements_list = check_db_for_measurements_in_period("001", (date.today() - timedelta(days = 6)).strftime('%Y-%m-%d %H:%M'), date.today().strftime('%Y-%m-%d %H:%M'))
