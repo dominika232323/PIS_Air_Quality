@@ -1,6 +1,5 @@
 import requests
 from gios_api.schemas import StationData, SensorData, Location, Measurement
-from gios_api.models import Sensor
 from datetime import datetime, timedelta
 from gios_api.errors import InvalidDateFormatError, TooWideDateRangeError
 
@@ -150,17 +149,3 @@ def get_last_n_days_sensor_measurements(sensor_id: int, n_days: int) -> list[Mea
     except requests.RequestException as e:
         print(f"An error occured while trying to fetch sensor's archival measurements: {e}")
         return []
-
-
-def check_db_for_measurements_in_period(sensor_id: str, date_from: str, date_to: str):
-    # naive iterate and check
-    # better? - get set where id ==id and date between () len == from-finish
-    try:
-        check_date_format(date_from)
-        check_date_format(date_to)
-        sensor_in_db = Sensor.objects.get(external_sensor_id=sensor_id)
-        measurements = Measurement.objects.filter(sensor=sensor_in_db, date__gte = date_from, date_lte = date_to).order_by("date")
-        return
-    except Exception as e:
-        print(e)
-        return
