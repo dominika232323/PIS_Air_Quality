@@ -17,7 +17,7 @@ migrations:
 tests_withDB:
 	pytest ./Air_Quality
 
-DB_tests: start_db tests_withDB
+DB_tests: start_db migrations tests_withDB
 
 #Run tests not requiring db
 tests:
