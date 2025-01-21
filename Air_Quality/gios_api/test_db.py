@@ -15,6 +15,11 @@ def populate_sensor_readings(db):
         external_sensor_id = "001",
         parameter = sensor_param
     )
+    Sensor.objects.create(
+        station = stat,
+        external_sensor_id = "52",
+        parameter = sensor_param
+    )
     sensor_measurements = [ (date.today()- timedelta(days = x), x) for x in range(0,30) ]
     for mes in sensor_measurements:
         Measurement.objects.create(
@@ -34,3 +39,13 @@ def test_get_data_week(populate_sensor_readings):
         assert mes.value == len(measurements_list) - (i+1)
         test_date = date.today() - timedelta(days = (len(measurements_list) -1-i))
         assert mes.date.date() == test_date
+
+def test_non_existant_node(populate_sensor_readings):
+    # populate_sensor_readings()
+    measurements_list = check_db_for_measurements_in_period('002', '2025-01-01 15:00', '2025-01-10 15:00')
+    assert len(measurements_list) == 0
+
+def test_no_data_in_db(populate_sensor_readings):
+    # populate_sensor_readings()
+    measurements_list = check_db_for_measurements_in_period('52', '2025-01-01 15:00', '2025-01-10 15:00')
+    assert len(measurements_list) >0
