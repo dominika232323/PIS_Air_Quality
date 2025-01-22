@@ -18,7 +18,7 @@ class District(models.Model):
     province = models.ForeignKey(Province, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"{self.name} in {self.province.name}"
+        return f"{self.name} in {self.province.name} ({self.id})"
 
     class Meta:
         managed = True
