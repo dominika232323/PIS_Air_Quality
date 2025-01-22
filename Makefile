@@ -15,6 +15,7 @@ migrations:
 
 #Virtualenv Make migrations
 migrations-venv:
+	sleep 3
 	../venv/bin/python3 ./Air_Quality/manage.py makemigrations  && ../venv/bin/python3 ./Air_Quality/manage.py migrate
 
 #Run all tests
