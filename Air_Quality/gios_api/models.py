@@ -95,7 +95,9 @@ class Sensor(models.Model):
     parameter = models.ForeignKey(Parameter, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"Sensor at {self.station.station_name} measuring {self.parameter.name}"
+        if self.external_sensor_id is not None:
+            return f"Sensor {self.external_sensor_id} at {self.station.station_name} measuring {self.parameter.name} ({self.id})"
+        return f"Sensor at {self.station.station_name} measuring {self.parameter.name} ({self.id})"
 
     class Meta:
         managed = True
