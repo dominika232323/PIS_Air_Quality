@@ -28,9 +28,9 @@ pipeline {
         steps {
             echo "Testing.."
             sh '''
-            cd Air_Quality
-            . .venv/bin/activate
-            pytest
+            ls
+            . Air_Quality/.venv/bin/activate
+            make tests
             '''
         }
     }
