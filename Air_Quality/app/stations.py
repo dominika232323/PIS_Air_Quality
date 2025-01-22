@@ -11,7 +11,7 @@ stations = requests.get("http://127.0.0.1:8000/stations/").json()
 
 stations_data = [
     {
-        "ID": station.get("id"),
+        "ID": station.get("external_station_id"),
         "Ulica": station.get("address", {}).get("name", "Brak danych"),
         "Miasto": station.get("address", {}).get("city", {}).get("name", "Brak danych"),
         "Województwo": station.get("address", {}).get("city", {}).get("commune", {}).get("district", {}).get("province", {}).get("name", "Brak danych"),
@@ -49,6 +49,7 @@ grid_response = AgGrid(
 selected_row = pd.DataFrame(grid_response.get("selected_rows", []))
 if not selected_row.empty:
     selected_station = selected_row.iloc[0]
+    print(selected_station)
     st.session_state.selected_station_id = selected_station["ID"]
     st.session_state.selected_station_name = selected_station["Nazwa Stacji"]
     st.switch_page("current/sensor_data.py")
