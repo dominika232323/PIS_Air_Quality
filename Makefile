@@ -19,13 +19,13 @@ migrations-venv:
 
 #Run all tests
 tests_withDB:
-	pytest ./Air_Quality
+	pytest ./Air_Quality/gios_api/tests
 
 DB_tests: start_db migrations tests_withDB
 
 #Run tests not requiring db
 tests:
-	pytest ./Air_Quality/gios_api/tests.py
+	pytest ./Air_Quality/gios_api/tests/test_services.py
 
 #Run tests with coverage
 coverage:
