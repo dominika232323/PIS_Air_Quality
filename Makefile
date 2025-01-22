@@ -18,12 +18,18 @@ migrations-venv:
 	../venv/bin/python3 ./Air_Quality/manage.py makemigrations  && ../venv/bin/python3 ./Air_Quality/manage.py migrate
 
 #Run all tests
+tests_withDB:
+	pytest ./Air_Quality/gios_api/tests
+
+DB_tests: start_db migrations tests_withDB
+
+#Run tests not requiring db
 tests:
-	pytest ./Air_Quality
+	pytest ./Air_Quality/gios_api/tests/test_services.py
 
 #Run tests with coverage
 coverage:
-	pytest ./Air_Quality --cov=. --cov-report=html $(COV_FAIL)
+	pytest ./Air_Quality/gios_api/tests --cov=. --cov-report=html $(COV_FAIL)
 
 #Clean up coverage artifacts
 clean:

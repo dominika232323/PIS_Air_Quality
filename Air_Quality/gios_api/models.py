@@ -6,7 +6,7 @@ class Province(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.id})"
 
     class Meta:
         managed = True
@@ -18,7 +18,7 @@ class District(models.Model):
     province = models.ForeignKey(Province, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"{self.name} in {self.province.name}"
+        return f"{self.name} in {self.province.name} ({self.id})"
 
     class Meta:
         managed = True
@@ -30,7 +30,7 @@ class Commune(models.Model):
     district = models.ForeignKey(District, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"{self.name} in {self.district.name}"
+        return f"{self.name} in {self.district.name} ({self.id})"
 
     class Meta:
         managed = True
@@ -42,7 +42,7 @@ class City(models.Model):
     commune = models.ForeignKey(Commune, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"{self.name} in {self.commune.name}"
+        return f"{self.name} in {self.commune.name} ({self.id})"
 
     class Meta:
         managed = True
@@ -54,7 +54,7 @@ class Address(models.Model):
     city = models.ForeignKey(City, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"{self.name} in {self.city.name}"
+        return f"{self.name} in {self.city.name} ({self.id})"
 
     class Meta:
         managed = True
@@ -68,7 +68,10 @@ class Station(models.Model):
     address = models.ForeignKey(Address, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"{self.station_name} at ({self.latitude}, {self.longitude}) in {self.address.name}"
+        if self.external_station_id is not None:
+            return f"{self.station_name} {self.external_station_id} on {self.address.name} ({self.id})"
+        return f"{self.station_name} on {self.address.name} ({self.id})"
+
 
     class Meta:
         managed = True
@@ -79,7 +82,7 @@ class Parameter(models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"{self.name} (Formula: {self.formula}, Code: {self.code})"
+        return f"{self.name} ({self.id})"
 
     class Meta:
         managed = True
@@ -92,7 +95,9 @@ class Sensor(models.Model):
     parameter = models.ForeignKey(Parameter, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"Sensor at {self.station.station_name} measuring {self.parameter.name}"
+        if self.external_sensor_id is not None:
+            return f"Sensor {self.external_sensor_id} at {self.station.station_name} measuring {self.parameter.name} ({self.id})"
+        return f"Sensor at {self.station.station_name} measuring {self.parameter.name} ({self.id})"
 
     class Meta:
         managed = True
@@ -106,7 +111,7 @@ class Measurement(models.Model):
     sensor = models.ForeignKey(Sensor, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"{self.value} for {self.parameter.name} on {self.date}"
+        return f"Measured {self.value} for {self.parameter.name} on {self.date} ({self.id})"
 
     class Meta:
         managed = True
@@ -117,7 +122,7 @@ class AirQualityLevel(models.Model):
     level_name = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"{self.level_name}"
+        return f"{self.level_name} ({self.id})"
 
     class Meta:
         managed = True
@@ -133,7 +138,7 @@ class AirQuality(models.Model):
     critical_param = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"{self.air_quality_level.level_name} at {self.station} on {self.calculate_date}: "
+        return f"{self.air_quality_level.level_name} at {self.station.station_name} on {self.source_date} ({self.id})"
 
     class Meta:
         managed = True
@@ -148,7 +153,7 @@ class AirQualityPollutant(models.Model):
     source_date = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.parameter} for {self.air_quality.station.station_name} at {self.calculate_date} "
+        return f"{self.parameter} for {self.air_quality.station.station_name} at {self.source_date} ({self.id})"
 
     class Meta:
         managed = True
