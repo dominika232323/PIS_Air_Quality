@@ -29,7 +29,7 @@ tests:
 
 #Run tests with coverage
 coverage:
-	pytest ./Air_Quality/gios_api/tests.py --cov=. --cov-report=html $(COV_FAIL)
+	pytest ./Air_Quality/gios_api/tests --cov=. --cov-report=html $(COV_FAIL)
 
 #Clean up coverage artifacts
 clean:
