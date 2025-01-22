@@ -153,7 +153,7 @@ class AirQualityPollutant(models.Model):
     source_date = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.parameter} for {self.air_quality.station.station_name} at {self.calculate_date} "
+        return f"{self.parameter} for {self.air_quality.station.station_name} at {self.source_date} ({self.id})"
 
     class Meta:
         managed = True
