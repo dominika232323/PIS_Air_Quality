@@ -54,7 +54,7 @@ def assign_pollution_level(value, indicator):
     return "Nieuwzględniony"
 
 concentration = {
-    "Pommiar stężeń": ["Dobry", "Dostateczny", "Zły"],
+    "Pomiar stężeń": ["Dobry", "Dostateczny", "Zły"],
     "tlenek węgla / CO [µg/m3]": ["0 - 5", "5.1 - 30", "> 30.1"],
     "benzen / SO2 [µg/m3]": ["0 - 5", "5.1 - 30", "> 30.1"],
 }
@@ -92,7 +92,11 @@ filtered_df = stations_df.copy()
 if indicator_query:
     filtered_df = filtered_df[filtered_df['Wskaźnik'].str.contains(indicator_query, case=False, na=False)]
 if location_query:
-    filtered_df = filtered_df[filtered_df['Wskaźnik'].str.contains(location_query, case=False, na=False)]
+    filtered_df = filtered_df[
+        filtered_df.apply(
+            lambda row: row.astype(str).str.contains(location_query, case=False, na=False).any(), axis=1
+        )
+    ]
 if pollution_level_filter:
     filtered_df = filtered_df[filtered_df['Poziom zanieczyszczeń'] == pollution_level_filter]
 
