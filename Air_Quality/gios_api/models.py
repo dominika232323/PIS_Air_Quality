@@ -30,7 +30,7 @@ class Commune(models.Model):
     district = models.ForeignKey(District, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"{self.name} in {self.district.name}"
+        return f"{self.name} in {self.district.name} ({self.id})"
 
     class Meta:
         managed = True
