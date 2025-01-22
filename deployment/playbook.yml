@@ -102,6 +102,10 @@
         chdir: /home/{{ ansible_user }}/PIS-proj/
         target: run-az
 
+    - name: pause for 5 s
+      pause:
+        seconds: 5
+
     - name: start streamlit in background
       shell: nohup ../venv/bin/python3 -m streamlit run ./Air_Quality/app/app.py --server.address 0.0.0.0 --server.port 8501 &
       args:
