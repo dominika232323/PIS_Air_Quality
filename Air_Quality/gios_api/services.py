@@ -123,7 +123,7 @@ def get_current_station_air_quality(station_id: int) -> str:
 def get_archival_sensor_measurements(sensor_id: int, date_from: str, date_to: str) -> list[Measurement]:
     try:
         validate_dates(date_from, date_to)
-        params = {"dateFrom": date_from, "dateTo": date_to}
+        params = {"dateFrom": date_from, "dateTo": date_to, "size": 400}
         data = fetch_data_from_api(f'https://api.gios.gov.pl/pjp-api/v1/rest/archivalData/getDataBySensor/{sensor_id}', params)
         measurements = data['Lista archiwalnych wyników pomiarów']
         return convert_json_into_measurements_objects(measurements)

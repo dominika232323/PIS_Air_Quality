@@ -6,15 +6,6 @@ import os
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-from gios_api.services import get_archival_sensor_measurements, get_last_n_days_sensor_measurements
-
-@st.cache_data
-def fetch_sensor_measurements(sensor_id, date_from, date_to):
-    return get_archival_sensor_measurements(sensor_id, date_from, date_to)
-
-@st.cache_data
-def fetch_last_n_days_sensor_measurements(sensor_id, n_days):
-    return get_last_n_days_sensor_measurements(sensor_id, n_days)
 
 station_id = st.session_state.get("selected_station_id")
 station_name = st.session_state.get("selected_station_name")
@@ -35,12 +26,13 @@ if sensor_id:
         date_from = datetime.today() - relativedelta(years=1)
         date_to = datetime.today()
 
-    sensor_measurements = fetch_sensor_measurements(sensor_id, date_from.strftime('%Y-%m-%d %H:%M'), date_to.strftime('%Y-%m-%d %H:%M'))
-
+    station_measurements = st.session_state.get('sensor_results', [])
+    measurements_for_sensor = station_measurements[sensor_id]
+    print(f"FETCHED DATA: {measurements_for_sensor}")
     valid_measurements = [
-        {"Data": m.date, "Wartość": m.value}
-        for m in sensor_measurements
-        if m.value >= 0
+        {"Data": m["Data"], "Wartość": m["Wartość"]}
+        for m in measurements_for_sensor
+        if m["Wartość"] >= 0
     ]
     sensor_df = pd.DataFrame(valid_measurements)
     try:

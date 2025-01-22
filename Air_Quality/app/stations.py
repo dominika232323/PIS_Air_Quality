@@ -49,7 +49,6 @@ grid_response = AgGrid(
 selected_row = pd.DataFrame(grid_response.get("selected_rows", []))
 if not selected_row.empty:
     selected_station = selected_row.iloc[0]
-    print(selected_station)
     st.session_state.selected_station_id = selected_station["ID"]
     st.session_state.selected_station_name = selected_station["Nazwa Stacji"]
     st.switch_page("current/sensor_data.py")
