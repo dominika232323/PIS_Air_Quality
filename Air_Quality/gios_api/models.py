@@ -54,7 +54,7 @@ class Address(models.Model):
     city = models.ForeignKey(City, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"{self.name} in {self.city.name}"
+        return f"{self.name} in {self.city.name} ({self.id})"
 
     class Meta:
         managed = True
