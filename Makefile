@@ -73,7 +73,7 @@ stop_streamlit:
 	pkill -f streamlit
 
 #Run application with one command:
-up: requirements start_db migrations update_db run
+up: requirements start_db migrations update_db run run_streamlit
 
 #Run application with one command on az vm:
 up-az: start_db migrations-venv run-az runstreamlit-az
