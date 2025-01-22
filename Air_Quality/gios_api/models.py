@@ -68,7 +68,10 @@ class Station(models.Model):
     address = models.ForeignKey(Address, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"{self.station_name} at ({self.latitude}, {self.longitude}) in {self.address.name}"
+        if self.external_station_id is not None:
+            return f"{self.station_name} {self.external_station_id} on {self.address.name} ({self.id})"
+        return f"{self.station_name} on {self.address.name} ({self.id})"
+
 
     class Meta:
         managed = True
