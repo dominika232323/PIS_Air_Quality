@@ -138,7 +138,7 @@ class AirQuality(models.Model):
     critical_param = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"{self.air_quality_level.level_name} at {self.station} on {self.calculate_date}: "
+        return f"{self.air_quality_level.level_name} at {self.station.station_name} on {self.source_date} ({self.id})"
 
     class Meta:
         managed = True
