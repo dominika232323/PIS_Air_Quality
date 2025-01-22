@@ -60,8 +60,9 @@ if sensor_id:
                       labels={"Data": "Data", "Wartość": "Wartość"})
         limits = quality_index.get(sensor_attribute, [])
         colors = ["green", "lightgreen", "yellow", "orange", "red", "darkred"]
+        labels = ["Bardzo dobry", "Dobry", "Umiarkowany", "Dostateczny", "Zły", "Bardzo zły"]
         for idx, limit in enumerate(limits):
-            fig.add_hline(y=limit, line_dash="dash", line_color=colors[idx], annotation_text=f"Limit {limit}",
+            fig.add_hline(y=limit, line_dash="dash", line_color=colors[idx], annotation_text=f"{labels[idx]} (Limit {limit})",
                           annotation_position="top right")
         st.plotly_chart(fig, use_container_width=True)
     except:
