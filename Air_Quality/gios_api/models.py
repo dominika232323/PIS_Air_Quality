@@ -42,7 +42,7 @@ class City(models.Model):
     commune = models.ForeignKey(Commune, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"{self.name} in {self.commune.name}"
+        return f"{self.name} in {self.commune.name} ({self.id})"
 
     class Meta:
         managed = True
