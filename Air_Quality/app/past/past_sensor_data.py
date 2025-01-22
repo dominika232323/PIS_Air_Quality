@@ -4,19 +4,15 @@ from st_aggrid import AgGrid, GridOptionsBuilder
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-from gios_api.services import get_station_sensors, get_current_sensor_measurements, get_current_station_air_quality
+from gios_api.services import get_station_sensors, get_last_n_days_sensor_measurements
 
 @st.cache_data
 def fetch_station_sensors(station_id):
     return get_station_sensors(station_id)
 
 @st.cache_data
-def fetch_sensor_measurements(sensor_id):
-    return get_current_sensor_measurements(sensor_id)
-
-@st.cache_data
-def fetch_air_quality_index(sensor_id):
-    return get_current_station_air_quality(sensor_id)
+def fetch_sensor_measurements(sensor_id, last_n_days):
+    return get_last_n_days_sensor_measurements(sensor_id, last_n_days)
 
 station_id = st.session_state.selected_station_id
 station_name = st.session_state.selected_station_name
@@ -24,30 +20,35 @@ station_name = st.session_state.selected_station_name
 if not station_id:
     st.warning("Nie wybrano żadnej stacji.")
 else:
+    last_n_days = st.slider(
+        "Wybierz sprzed ilu dni chcesz pobrać dane:",
+        min_value=1,
+        max_value=100,
+        value=1,
+        step=1,
+    )
     sensors = fetch_station_sensors(station_id)
     sensor_results = []
     for sensor in sensors:
-        sensor_data = fetch_sensor_measurements(sensor.id)
+        sensor_data = fetch_sensor_measurements(sensor.id, last_n_days)
         if sensor_data:
             min_measurement = min(sensor_data, key=lambda x: x.value if x.value is not None else float('inf'))
             max_measurement = max(sensor_data, key=lambda x: x.value if x.value is not None else float('-inf'))
             latest_measurement = sensor_data[0]
             if latest_measurement:
                 sensor_results.append({
-					"Sensor": sensor.indicator,
-					"ID Sensora": sensor.id,
-					"Data": latest_measurement.date,
-					"Wartość": latest_measurement.value,
-					"Min Wartość": min_measurement.value,
-					"Data Min": min_measurement.date,
-					"Max Wartość": max_measurement.value,
-					"Data Max": max_measurement.date
+                "Sensor": sensor.indicator,
+                "ID Sensora": sensor.id,
+                "Data": latest_measurement.date,
+                "Wartość": latest_measurement.value,
+                "Min Wartość": min_measurement.value,
+                "Data Min": min_measurement.date,
+                "Max Wartość": max_measurement.value,
+                "Data Max": max_measurement.date
                 })
 
     results_df = pd.DataFrame(sensor_results)
-    st.write(f"### Najnowsze dane z sensorów na stacji {station_id}. {station_name}")
-    air_quality = get_current_station_air_quality(station_id)
-    st.write(f"Wskaźnik jakości powietrza: {air_quality}")
+    st.write(f"### Dane sprzed {last_n_days} dni dla sensorów na stacji {station_id}. {station_name}")
     gb_sensors = GridOptionsBuilder.from_dataframe(results_df)
     gb_sensors.configure_selection("single")
     gb_sensors.configure_auto_height(autoHeight=True)
