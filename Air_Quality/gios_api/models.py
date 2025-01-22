@@ -111,7 +111,7 @@ class Measurement(models.Model):
     sensor = models.ForeignKey(Sensor, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f"{self.value} for {self.parameter.name} on {self.date}"
+        return f"Measured {self.value} for {self.parameter.name} on {self.date} ({self.id})"
 
     class Meta:
         managed = True
